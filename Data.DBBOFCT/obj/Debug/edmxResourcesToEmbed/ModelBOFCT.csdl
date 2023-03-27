@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BOFCTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Evento">
+    <Key>
+      <PropertyRef Name="EventoID" />
+    </Key>
+    <Property Name="EventoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TipoEventoID" Type="Int32" Nullable="false" />
+    <Property Name="Asunto" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Mensaje" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="TipoEvento" Relationship="Self.FK_Evento_TipoEvento" FromRole="Evento" ToRole="TipoEvento" />
+  </EntityType>
+  <EntityType Name="Grupo">
+    <Key>
+      <PropertyRef Name="GrupoID" />
+    </Key>
+    <Property Name="GrupoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ParametroWidget_Grupo" Relationship="Self.FK_ParametroWidget_Grupo_Grupo" FromRole="Grupo" ToRole="ParametroWidget_Grupo" />
+  </EntityType>
+  <EntityType Name="Parametro">
+    <Key>
+      <PropertyRef Name="ParametroID" />
+    </Key>
+    <Property Name="ParametroID" Type="Int32" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ParametroWidget" Relationship="Self.FK_ParametroWidget_Parametros" FromRole="Parametro" ToRole="ParametroWidget" />
+  </EntityType>
+  <EntityType Name="ParametroWidget">
+    <Key>
+      <PropertyRef Name="ParametroWidgetID" />
+    </Key>
+    <Property Name="ParametroWidgetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ValorDefecto" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="WidgetID" Type="Int32" Nullable="false" />
+    <Property Name="ParametroID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Parametro" Relationship="Self.FK_ParametroWidget_Parametros" FromRole="ParametroWidget" ToRole="Parametro" />
+    <NavigationProperty Name="ParametroWidget_Grupo" Relationship="Self.FK_ParametroWidget_Grupo_ParametroWidget" FromRole="ParametroWidget" ToRole="ParametroWidget_Grupo" />
+  </EntityType>
+  <EntityType Name="ParametroWidget_Grupo">
+    <Key>
+      <PropertyRef Name="ParametroWidgetGrupoID" />
+    </Key>
+    <Property Name="ParametroWidgetGrupoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ParametroWidgetID" Type="Int32" Nullable="false" />
+    <Property Name="GrupoID" Type="Int32" />
+    <Property Name="Valor" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UsuarioID" Type="Int32" />
+    <NavigationProperty Name="Grupo" Relationship="Self.FK_ParametroWidget_Grupo_Grupo" FromRole="ParametroWidget_Grupo" ToRole="Grupo" />
+    <NavigationProperty Name="ParametroWidget" Relationship="Self.FK_ParametroWidget_Grupo_ParametroWidget" FromRole="ParametroWidget_Grupo" ToRole="ParametroWidget" />
+    <NavigationProperty Name="Usuario" Relationship="Self.FK_ParametroWidget_Grupo_Usuario" FromRole="ParametroWidget_Grupo" ToRole="Usuario" />
+  </EntityType>
+  <EntityType Name="TipoEvento">
+    <Key>
+      <PropertyRef Name="TipoEventoID" />
+    </Key>
+    <Property Name="TipoEventoID" Type="Int32" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Evento" Relationship="Self.FK_Evento_TipoEvento" FromRole="TipoEvento" ToRole="Evento" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="UsuarioID" />
+    </Key>
+    <Property Name="UsuarioID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Activo" Type="Boolean" Nullable="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="FechaActualizacion" Type="DateTime" Precision="3" />
+    <Property Name="IDEmpleado" Type="Int32" />
+    <Property Name="GlobalEmployeeID" Type="Int32" />
+    <NavigationProperty Name="ParametroWidget_Grupo" Relationship="Self.FK_ParametroWidget_Grupo_Usuario" FromRole="Usuario" ToRole="ParametroWidget_Grupo" />
+  </EntityType>
+  <Association Name="FK_Evento_TipoEvento">
+    <End Role="TipoEvento" Type="Self.TipoEvento" Multiplicity="1" />
+    <End Role="Evento" Type="Self.Evento" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoEvento">
+        <PropertyRef Name="TipoEventoID" />
+      </Principal>
+      <Dependent Role="Evento">
+        <PropertyRef Name="TipoEventoID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ParametroWidget_Grupo_Grupo">
+    <End Role="Grupo" Type="Self.Grupo" Multiplicity="0..1" />
+    <End Role="ParametroWidget_Grupo" Type="Self.ParametroWidget_Grupo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grupo">
+        <PropertyRef Name="GrupoID" />
+      </Principal>
+      <Dependent Role="ParametroWidget_Grupo">
+        <PropertyRef Name="GrupoID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ParametroWidget_Parametros">
+    <End Role="Parametro" Type="Self.Parametro" Multiplicity="1" />
+    <End Role="ParametroWidget" Type="Self.ParametroWidget" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Parametro">
+        <PropertyRef Name="ParametroID" />
+      </Principal>
+      <Dependent Role="ParametroWidget">
+        <PropertyRef Name="ParametroID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ParametroWidget_Grupo_ParametroWidget">
+    <End Role="ParametroWidget" Type="Self.ParametroWidget" Multiplicity="1" />
+    <End Role="ParametroWidget_Grupo" Type="Self.ParametroWidget_Grupo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ParametroWidget">
+        <PropertyRef Name="ParametroWidgetID" />
+      </Principal>
+      <Dependent Role="ParametroWidget_Grupo">
+        <PropertyRef Name="ParametroWidgetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ParametroWidget_Grupo_Usuario">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+    <End Role="ParametroWidget_Grupo" Type="Self.ParametroWidget_Grupo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="UsuarioID" />
+      </Principal>
+      <Dependent Role="ParametroWidget_Grupo">
+        <PropertyRef Name="UsuarioID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BOFCTEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Evento" EntityType="Self.Evento" />
+    <EntitySet Name="Grupo" EntityType="Self.Grupo" />
+    <EntitySet Name="Parametro" EntityType="Self.Parametro" />
+    <EntitySet Name="ParametroWidget" EntityType="Self.ParametroWidget" />
+    <EntitySet Name="ParametroWidget_Grupo" EntityType="Self.ParametroWidget_Grupo" />
+    <EntitySet Name="TipoEvento" EntityType="Self.TipoEvento" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+    <AssociationSet Name="FK_Evento_TipoEvento" Association="Self.FK_Evento_TipoEvento">
+      <End Role="TipoEvento" EntitySet="TipoEvento" />
+      <End Role="Evento" EntitySet="Evento" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ParametroWidget_Grupo_Grupo" Association="Self.FK_ParametroWidget_Grupo_Grupo">
+      <End Role="Grupo" EntitySet="Grupo" />
+      <End Role="ParametroWidget_Grupo" EntitySet="ParametroWidget_Grupo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ParametroWidget_Parametros" Association="Self.FK_ParametroWidget_Parametros">
+      <End Role="Parametro" EntitySet="Parametro" />
+      <End Role="ParametroWidget" EntitySet="ParametroWidget" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ParametroWidget_Grupo_ParametroWidget" Association="Self.FK_ParametroWidget_Grupo_ParametroWidget">
+      <End Role="ParametroWidget" EntitySet="ParametroWidget" />
+      <End Role="ParametroWidget_Grupo" EntitySet="ParametroWidget_Grupo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ParametroWidget_Grupo_Usuario" Association="Self.FK_ParametroWidget_Grupo_Usuario">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="ParametroWidget_Grupo" EntitySet="ParametroWidget_Grupo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
