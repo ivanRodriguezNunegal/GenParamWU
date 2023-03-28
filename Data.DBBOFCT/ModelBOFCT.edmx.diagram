@@ -17,6 +17,9 @@
         <AssociationConnector Association="BOFCTModel.FK_ParametroWidget_Parametros" ManuallyRouted="false" />
         <AssociationConnector Association="BOFCTModel.FK_ParametroWidget_Grupo_ParametroWidget" ManuallyRouted="false" />
         <AssociationConnector Association="BOFCTModel.FK_ParametroWidget_Grupo_Usuario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="BOFCTModel.GrupoUsuario" Width="1.5" PointX="5.25" PointY="8.625" />
+        <AssociationConnector Association="BOFCTModel.FK_GrupoUsuario_Grupo" />
+        <AssociationConnector Association="BOFCTModel.FK_GrupoUsuario_Usuario" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

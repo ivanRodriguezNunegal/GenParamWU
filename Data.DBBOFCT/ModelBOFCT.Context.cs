@@ -32,5 +32,6 @@ namespace Data.DBBOFCT
         public virtual DbSet<ParametroWidget_Grupo> ParametroWidget_Grupo { get; set; }
         public virtual DbSet<TipoEvento> TipoEvento { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<GrupoUsuario> GrupoUsuario { get; set; }
     }
 }

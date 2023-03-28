@@ -14,7 +14,7 @@ namespace GenParametroWU
     public partial class Form1 : Form
     {
 
-#region Metodos
+        #region Metodos
 
         public Form1()
         {
@@ -35,12 +35,51 @@ namespace GenParametroWU
             cbGrupos.ValueMember = "GrupoID";
         }
 
-        #endregion
 
+        #endregion
 
         #region Eventos
 
         #endregion
 
+        private void btnEjecutar_Click(object sender, EventArgs e)
+        {
+            using (BOFCTEntities db = new BOFCTEntities())
+            {
+                List<ParametroWidget_Grupo> lista = new List<ParametroWidget_Grupo>();
+                lista = ParametroWidget_Grupo.GetList(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
+
+                //Hacer lista para el metodo GetUsersInGroup creado en Usuario
+                List<Usuario> listaUsuarios = new List<Usuario>();
+                listaUsuarios = Usuario.GetUsersInGroup(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
+
+
+
+                //Buscar usuarios pertenecientes a Grupo
+                //De esa consulta saldrá una lista de usuarios
+                /*
+                 * Ejemplo de insercion 
+                 */
+                Grupo g = db.Grupo.Create();
+                g.Nombre = "Test Nombre 28/03/2023";
+                g.Descripcion = "Test Descripcion";
+                Grupo.Insert(db, g);
+
+                db.SaveChanges();
+
+                //Aquí pondremos otro foreach para recorrernos cada usuario
+                //En cada iteración del foreach de usuarios, crearemos un registro en la tabla ParametroWidget_Grupo con GrupoID = null y el UsuarioID que corresponda
+
+                foreach (ParametroWidget_Grupo item in lista)
+                {
+                    foreach(Usuario item2 in listaUsuarios)
+                    {
+
+                    }
+                }
+                
+
+            }
+        }
     }
 }

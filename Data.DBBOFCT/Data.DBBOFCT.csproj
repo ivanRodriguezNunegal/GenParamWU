@@ -57,8 +57,14 @@
       <DependentUpon>ModelBOFCT.tt</DependentUpon>
     </Compile>
     <Compile Include="ExtendedEntities\Grupo.cs" />
+    <Compile Include="ExtendedEntities\GrupoUsuario.cs" />
     <Compile Include="ExtendedEntities\Parametro.cs" />
+    <Compile Include="ExtendedEntities\ParametroWidget_Grupo.cs" />
+    <Compile Include="ExtendedEntities\Usuario.cs" />
     <Compile Include="Grupo.cs">
+      <DependentUpon>ModelBOFCT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GrupoUsuario.cs">
       <DependentUpon>ModelBOFCT.tt</DependentUpon>
     </Compile>
     <Compile Include="ModelBOFCT.Context.cs">

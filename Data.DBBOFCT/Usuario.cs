@@ -18,6 +18,7 @@ namespace Data.DBBOFCT
         public Usuario()
         {
             this.ParametroWidget_Grupo = new HashSet<ParametroWidget_Grupo>();
+            this.GrupoUsuario = new HashSet<GrupoUsuario>();
         }
     
         public int UsuarioID { get; set; }
@@ -32,5 +33,7 @@ namespace Data.DBBOFCT
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ParametroWidget_Grupo> ParametroWidget_Grupo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GrupoUsuario> GrupoUsuario { get; set; }
     }
 }

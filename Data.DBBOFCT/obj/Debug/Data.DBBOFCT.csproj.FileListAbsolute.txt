@@ -10,3 +10,15 @@ C:\Users\Ivan R\Source\Repos\FCT\GenParametroWU\Data.DBBOFCT\obj\Debug\Data.DBBO
 C:\Users\Ivan R\Source\Repos\FCT\GenParametroWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.csproj.CopyComplete
 C:\Users\Ivan R\Source\Repos\FCT\GenParametroWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.dll
 C:\Users\Ivan R\Source\Repos\FCT\GenParametroWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.pdb
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\bin\Debug\Data.DBBOFCT.dll.config
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\bin\Debug\Data.DBBOFCT.dll
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\bin\Debug\Data.DBBOFCT.pdb
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\bin\Debug\EntityFramework.dll
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\bin\Debug\EntityFramework.xml
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.csproj.AssemblyReference.cache
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.csproj.CoreCompileInputs.cache
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.csproj.CopyComplete
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.dll
+C:\Users\Goibe\Source\Repos\GenParamWU\Data.DBBOFCT\obj\Debug\Data.DBBOFCT.pdb

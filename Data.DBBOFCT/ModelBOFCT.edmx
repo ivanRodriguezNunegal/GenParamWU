@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BOFCTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BOFCTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Evento">
           <Key>
             <PropertyRef Name="EventoID" />
@@ -22,6 +22,14 @@
           <Property Name="GrupoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="255" />
           <Property Name="Descripcion" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="GrupoUsuario">
+          <Key>
+            <PropertyRef Name="GrupoUsuarioID" />
+          </Key>
+          <Property Name="GrupoUsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
+          <Property Name="GrupoID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Parametro">
           <Key>
@@ -84,6 +92,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_GrupoUsuario_Grupo">
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="1" />
+          <End Role="GrupoUsuario" Type="Self.GrupoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="GrupoID" />
+            </Principal>
+            <Dependent Role="GrupoUsuario">
+              <PropertyRef Name="GrupoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GrupoUsuario_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="GrupoUsuario" Type="Self.GrupoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="GrupoUsuario">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ParametroWidget_Grupo_Grupo">
           <End Role="Grupo" Type="Self.Grupo" Multiplicity="0..1" />
           <End Role="ParametroWidget_Grupo" Type="Self.ParametroWidget_Grupo" Multiplicity="*" />
@@ -135,6 +167,7 @@
         <EntityContainer Name="BOFCTModelStoreContainer">
           <EntitySet Name="Evento" EntityType="Self.Evento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GrupoUsuario" EntityType="Self.GrupoUsuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Parametro" EntityType="Self.Parametro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ParametroWidget" EntityType="Self.ParametroWidget" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ParametroWidget_Grupo" EntityType="Self.ParametroWidget_Grupo" Schema="dbo" store:Type="Tables" />
@@ -143,6 +176,14 @@
           <AssociationSet Name="FK_Evento_TipoEvento" Association="Self.FK_Evento_TipoEvento">
             <End Role="TipoEvento" EntitySet="TipoEvento" />
             <End Role="Evento" EntitySet="Evento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GrupoUsuario_Grupo" Association="Self.FK_GrupoUsuario_Grupo">
+            <End Role="Grupo" EntitySet="Grupo" />
+            <End Role="GrupoUsuario" EntitySet="GrupoUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GrupoUsuario_Usuario" Association="Self.FK_GrupoUsuario_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="GrupoUsuario" EntitySet="GrupoUsuario" />
           </AssociationSet>
           <AssociationSet Name="FK_ParametroWidget_Grupo_Grupo" Association="Self.FK_ParametroWidget_Grupo_Grupo">
             <End Role="Grupo" EntitySet="Grupo" />
@@ -161,8 +202,7 @@
             <End Role="ParametroWidget" EntitySet="ParametroWidget" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BOFCTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -185,6 +225,7 @@
           <Property Name="Nombre" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Descripcion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ParametroWidget_Grupo" Relationship="Self.FK_ParametroWidget_Grupo_Grupo" FromRole="Grupo" ToRole="ParametroWidget_Grupo" />
+          <NavigationProperty Name="GrupoUsuario" Relationship="BOFCTModel.FK_GrupoUsuario_Grupo" FromRole="Grupo" ToRole="GrupoUsuario" />
         </EntityType>
         <EntityType Name="Parametro">
           <Key>
@@ -242,6 +283,7 @@
           <Property Name="IDEmpleado" Type="Int32" />
           <Property Name="GlobalEmployeeID" Type="Int32" />
           <NavigationProperty Name="ParametroWidget_Grupo" Relationship="Self.FK_ParametroWidget_Grupo_Usuario" FromRole="Usuario" ToRole="ParametroWidget_Grupo" />
+          <NavigationProperty Name="GrupoUsuario" Relationship="BOFCTModel.FK_GrupoUsuario_Usuario" FromRole="Usuario" ToRole="GrupoUsuario" />
         </EntityType>
         <Association Name="FK_Evento_TipoEvento">
           <End Role="TipoEvento" Type="Self.TipoEvento" Multiplicity="1" />
@@ -331,7 +373,50 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="ParametroWidget_Grupo" EntitySet="ParametroWidget_Grupo" />
           </AssociationSet>
+          <EntitySet Name="GrupoUsuario" EntityType="BOFCTModel.GrupoUsuario" />
+          <AssociationSet Name="FK_GrupoUsuario_Grupo" Association="BOFCTModel.FK_GrupoUsuario_Grupo">
+            <End Role="Grupo" EntitySet="Grupo" />
+            <End Role="GrupoUsuario" EntitySet="GrupoUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GrupoUsuario_Usuario" Association="BOFCTModel.FK_GrupoUsuario_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="GrupoUsuario" EntitySet="GrupoUsuario" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="GrupoUsuario">
+          <Key>
+            <PropertyRef Name="GrupoUsuarioID" />
+          </Key>
+          <Property Name="GrupoUsuarioID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="GrupoID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Grupo" Relationship="BOFCTModel.FK_GrupoUsuario_Grupo" FromRole="GrupoUsuario" ToRole="Grupo" />
+          <NavigationProperty Name="Usuario" Relationship="BOFCTModel.FK_GrupoUsuario_Usuario" FromRole="GrupoUsuario" ToRole="Usuario" />
+        </EntityType>
+        <Association Name="FK_GrupoUsuario_Grupo">
+          <End Type="BOFCTModel.Grupo" Role="Grupo" Multiplicity="1" />
+          <End Type="BOFCTModel.GrupoUsuario" Role="GrupoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="GrupoID" />
+            </Principal>
+            <Dependent Role="GrupoUsuario">
+              <PropertyRef Name="GrupoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GrupoUsuario_Usuario">
+          <End Type="BOFCTModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="BOFCTModel.GrupoUsuario" Role="GrupoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="GrupoUsuario">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -409,6 +494,15 @@
                 <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
                 <ScalarProperty Name="IDEmpleado" ColumnName="IDEmpleado" />
                 <ScalarProperty Name="GlobalEmployeeID" ColumnName="GlobalEmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GrupoUsuario">
+            <EntityTypeMapping TypeName="BOFCTModel.GrupoUsuario">
+              <MappingFragment StoreEntitySet="GrupoUsuario">
+                <ScalarProperty Name="GrupoID" ColumnName="GrupoID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="GrupoUsuarioID" ColumnName="GrupoUsuarioID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

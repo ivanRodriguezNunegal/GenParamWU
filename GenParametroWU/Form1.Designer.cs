@@ -30,32 +30,47 @@
         {
             this.cbGrupos = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnEjecutar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbGrupos
             // 
             this.cbGrupos.FormattingEnabled = true;
-            this.cbGrupos.Location = new System.Drawing.Point(76, 49);
+            this.cbGrupos.Location = new System.Drawing.Point(101, 60);
+            this.cbGrupos.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbGrupos.Name = "cbGrupos";
-            this.cbGrupos.Size = new System.Drawing.Size(147, 21);
+            this.cbGrupos.Size = new System.Drawing.Size(195, 24);
             this.cbGrupos.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(29, 52);
+            this.label1.Location = new System.Drawing.Point(39, 64);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.Size = new System.Drawing.Size(51, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Grupos";
             // 
+            // btnEjecutar
+            // 
+            this.btnEjecutar.Location = new System.Drawing.Point(384, 57);
+            this.btnEjecutar.Name = "btnEjecutar";
+            this.btnEjecutar.Size = new System.Drawing.Size(93, 31);
+            this.btnEjecutar.TabIndex = 2;
+            this.btnEjecutar.Text = "Ejecutar";
+            this.btnEjecutar.UseVisualStyleBackColor = true;
+            this.btnEjecutar.Click += new System.EventHandler(this.btnEjecutar_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.btnEjecutar);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbGrupos);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -67,6 +82,7 @@
 
         private System.Windows.Forms.ComboBox cbGrupos;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnEjecutar;
     }
 }
 
