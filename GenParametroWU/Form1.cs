@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Data.DBBOFCT;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace GenParametroWU
 {
@@ -41,6 +42,7 @@ namespace GenParametroWU
         #region Eventos
 
         #endregion
+    
 
         private void btnEjecutar_Click(object sender, EventArgs e)
         {
@@ -58,6 +60,8 @@ namespace GenParametroWU
                     //Hacer lista para el metodo GetUsersInGroup creado en Usuario
                     List<Usuario> listaUsuarios = new List<Usuario>();
                     listaUsuarios = Usuario.GetUsersInGroup(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
+
+                    pgbrEjecucion.Maximum = lista.Count;
 
                     /*
                     //para que se guarden los cambios realizados en la BD
@@ -104,7 +108,15 @@ namespace GenParametroWU
                         evFin.Mensaje = "Proceso finalizado contra " + item.GrupoID;
                         evFin.FechaCreacion = DateTime.Now;
                         Evento.Insert(db, evFin);
+
+                        pgbrEjecucion.Value++;
                     }
+                    //mostramos mensaje de finalizado y reset de la progressbar
+                    MessageBox.Show("¡Proceso finalizado exitosamente!", "¡Terminado!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    pgbrEjecucion.Value = 0;
+
+                    //guardamos cambios en BD
+                    db.SaveChanges();
 
                 }
                 catch (Exception ex)
@@ -116,6 +128,7 @@ namespace GenParametroWU
                     ev.Mensaje = ex.Message;
                     ev.FechaCreacion = DateTime.Now;
                     Evento.Insert(db, ev);
+                    db.SaveChanges();
 
                 }
             }
