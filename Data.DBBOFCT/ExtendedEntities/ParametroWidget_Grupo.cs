@@ -20,6 +20,34 @@ namespace Data.DBBOFCT
 
             return lista;
         }
+
+        /// <summary>
+        /// Inserción nuevo registro
+        /// </summary>
+        /// <param name="db"></param>
+        /// <returns></returns>
+        public static void Insert(BOFCTEntities db, ParametroWidget_Grupo pwg)
+        {
+            db.ParametroWidget_Grupo.Add(pwg);
+        }
+
+        public static void CheckRedundant(BOFCTEntities db, ParametroWidget_Grupo pwg)
+        {
+          
+            List<ParametroWidget_Grupo> lista = new List<ParametroWidget_Grupo>();
+            lista = (from p in db.ParametroWidget_Grupo
+                     where p.UsuarioID == pwg.UsuarioID &&
+                     p.Valor == pwg.Valor &&
+                     p.ParametroWidgetID == pwg.ParametroWidgetID
+                     select p).ToList();
+
+            if (lista.Count == 0)
+            {
+                ParametroWidget_Grupo.Insert(db, pwg);
+
+            }    
+           
+        }
     }
 }
 

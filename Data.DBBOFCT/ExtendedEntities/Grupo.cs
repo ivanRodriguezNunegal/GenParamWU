@@ -18,18 +18,18 @@ namespace Data.DBBOFCT
         {
                 return (from g in db.Grupo
                         orderby g.GrupoID
-                        select g).ToList();
+                        select g).ToList(); 
         }
 
 
-        /// <summary>
-        /// Inserción nuevo registro
-        /// </summary>
-        /// <param name="db"></param>
-        /// <returns></returns>
-        public static void Insert(BOFCTEntities db, Grupo g)
-        {
-            db.Grupo.Add(g);
-        }
+            /// <summary>
+            /// Inserción nuevo registro
+            /// </summary>
+            /// <param name="db"></param>
+            /// <returns></returns>
+            public static void Insert(BOFCTEntities db, Grupo g)
+            {
+                db.Grupo.Add(g);
+            }
     }
 }

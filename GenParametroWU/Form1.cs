@@ -44,41 +44,73 @@ namespace GenParametroWU
 
         private void btnEjecutar_Click(object sender, EventArgs e)
         {
+            //Buscar usuarios pertenecientes a Grupo
+            //De esa consulta saldrá una lista de usuarios
+
             using (BOFCTEntities db = new BOFCTEntities())
             {
-                List<ParametroWidget_Grupo> lista = new List<ParametroWidget_Grupo>();
-                lista = ParametroWidget_Grupo.GetList(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
-
-                //Hacer lista para el metodo GetUsersInGroup creado en Usuario
-                List<Usuario> listaUsuarios = new List<Usuario>();
-                listaUsuarios = Usuario.GetUsersInGroup(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
-
-
-
-                //Buscar usuarios pertenecientes a Grupo
-                //De esa consulta saldrá una lista de usuarios
-                /*
-                 * Ejemplo de insercion 
-                 */
-                Grupo g = db.Grupo.Create();
-                g.Nombre = "Test Nombre 28/03/2023";
-                g.Descripcion = "Test Descripcion";
-                Grupo.Insert(db, g);
-
-                db.SaveChanges();
-
-                //Aquí pondremos otro foreach para recorrernos cada usuario
-                //En cada iteración del foreach de usuarios, crearemos un registro en la tabla ParametroWidget_Grupo con GrupoID = null y el UsuarioID que corresponda
-
-                foreach (ParametroWidget_Grupo item in lista)
+                try
                 {
-                    foreach(Usuario item2 in listaUsuarios)
+
+                    List<ParametroWidget_Grupo> lista = new List<ParametroWidget_Grupo>();
+                    lista = ParametroWidget_Grupo.GetList(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
+
+                    //Hacer lista para el metodo GetUsersInGroup creado en Usuario
+                    List<Usuario> listaUsuarios = new List<Usuario>();
+                    listaUsuarios = Usuario.GetUsersInGroup(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
+
+                    /*
+                    //para que se guarden los cambios realizados en la BD
+                    db.SaveChanges();
+
+                    */
+
+                    foreach (ParametroWidget_Grupo item in lista)
                     {
+                        foreach (Usuario item2 in listaUsuarios)
+                        {
+                            //En cada iteración del foreach de usuarios,
+                            //crearemos un registro en la tabla ParametroWidget_Grupo con GrupoID = null
+                            //y el UsuarioID que corresponda
+                            ParametroWidget_Grupo pwg = db.ParametroWidget_Grupo.Create();
+                            pwg.ParametroWidgetID = item.ParametroWidgetID;
+                            pwg.GrupoID = null;
+                            pwg.Valor = item.Valor;
+                            pwg.UsuarioID = item2.UsuarioID;
 
+                            //comprobacion de datos redundantes
+                            ParametroWidget_Grupo.CheckRedundant(db, pwg);
+
+                            //insertamos un evento de info para registrar en BD
+                            Evento evReg = db.Evento.Create();
+                            evReg.TipoEventoID = 4;
+                            evReg.Asunto = "Inserción ParametroWidget_Grupo";
+                            evReg.Mensaje = item2.UsuarioID.ToString();
+                            evReg.FechaCreacion = DateTime.Now;
+                            Evento.Insert(db, evReg);
+                        }
+
+                        //insertamos un evento de info una vez se hayan insertado todos los registros en BD
+                        Evento evFin = db.Evento.Create();
+                        evFin.TipoEventoID = 4;
+                        evFin.Asunto = "Inserción Compeltada";
+                        evFin.Mensaje = "Proceso finalizado contra " + item.GrupoID;
+                        evFin.FechaCreacion = DateTime.Now;
+                        Evento.Insert(db, evFin);
                     }
-                }
-                
 
+                }
+                catch (Exception ex)
+                {
+
+                    Evento ev = db.Evento.Create();
+                    ev.TipoEventoID = 1;
+                    ev.Asunto = "Creacion de registro";
+                    ev.Mensaje = ex.Message;
+                    ev.FechaCreacion = DateTime.Now;
+                    Evento.Insert(db, ev);
+
+                }
             }
         }
     }

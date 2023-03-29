@@ -9,7 +9,7 @@
         <EntityTypeShape EntityType="BOFCTModel.Grupo" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BOFCTModel.Parametro" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="BOFCTModel.ParametroWidget" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="BOFCTModel.ParametroWidget_Grupo" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="BOFCTModel.ParametroWidget_Grupo" Width="2" PointX="5.25" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="BOFCTModel.TipoEvento" Width="1.5" PointX="5.75" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BOFCTModel.Usuario" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
         <AssociationConnector Association="BOFCTModel.FK_Evento_TipoEvento" ManuallyRouted="false" />

@@ -31,13 +31,14 @@
             this.cbGrupos = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnEjecutar = new System.Windows.Forms.Button();
+            this.panelDatos = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // cbGrupos
             // 
             this.cbGrupos.FormattingEnabled = true;
             this.cbGrupos.Location = new System.Drawing.Point(101, 60);
-            this.cbGrupos.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbGrupos.Margin = new System.Windows.Forms.Padding(4);
             this.cbGrupos.Name = "cbGrupos";
             this.cbGrupos.Size = new System.Drawing.Size(195, 24);
             this.cbGrupos.TabIndex = 0;
@@ -62,15 +63,23 @@
             this.btnEjecutar.UseVisualStyleBackColor = true;
             this.btnEjecutar.Click += new System.EventHandler(this.btnEjecutar_Click);
             // 
+            // panelDatos
+            // 
+            this.panelDatos.Location = new System.Drawing.Point(101, 144);
+            this.panelDatos.Name = "panelDatos";
+            this.panelDatos.Size = new System.Drawing.Size(376, 134);
+            this.panelDatos.TabIndex = 3;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.panelDatos);
             this.Controls.Add(this.btnEjecutar);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbGrupos);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -83,6 +92,7 @@
         private System.Windows.Forms.ComboBox cbGrupos;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnEjecutar;
+        private System.Windows.Forms.Panel panelDatos;
     }
 }
 
