@@ -31,9 +31,8 @@ namespace Data.DBBOFCT
             db.ParametroWidget_Grupo.Add(pwg);
         }
 
-        public static void CheckRedundant(BOFCTEntities db, ParametroWidget_Grupo pwg)
+        public static bool CheckRedundant(BOFCTEntities db, ParametroWidget_Grupo pwg)
         {
-          
             List<ParametroWidget_Grupo> lista = new List<ParametroWidget_Grupo>();
             lista = (from p in db.ParametroWidget_Grupo
                      where p.UsuarioID == pwg.UsuarioID &&
@@ -41,11 +40,15 @@ namespace Data.DBBOFCT
                      p.ParametroWidgetID == pwg.ParametroWidgetID
                      select p).ToList();
 
-            if (lista.Count == 0)
+            if (lista.Count > 0)
             {
-                ParametroWidget_Grupo.Insert(db, pwg);
+                return true;
 
             }    
+            else
+            {
+                return false;
+            }
            
         }
     }

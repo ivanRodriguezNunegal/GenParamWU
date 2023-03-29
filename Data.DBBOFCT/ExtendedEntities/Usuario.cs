@@ -13,7 +13,7 @@ namespace Data.DBBOFCT
         {
             List<Usuario> lista = new List<Usuario>();
             //LinQ
-           lista = (from g in db.Grupo
+            lista = (from g in db.Grupo
                      join gu in db.GrupoUsuario on g.GrupoID equals gu.GrupoID
                      join u in db.Usuario on gu.UsuarioID equals u.UsuarioID
                      where g.GrupoID == idGrupo

@@ -78,22 +78,29 @@ namespace GenParametroWU
                             pwg.Valor = item.Valor;
                             pwg.UsuarioID = item2.UsuarioID;
 
-                            //comprobacion de datos redundantes
-                            ParametroWidget_Grupo.CheckRedundant(db, pwg);
 
-                            //insertamos un evento de info para registrar en BD
-                            Evento evReg = db.Evento.Create();
-                            evReg.TipoEventoID = 4;
-                            evReg.Asunto = "Inserción ParametroWidget_Grupo";
-                            evReg.Mensaje = item2.UsuarioID.ToString();
-                            evReg.FechaCreacion = DateTime.Now;
-                            Evento.Insert(db, evReg);
+
+                            //comprobacion de datos redundantes
+                            bool duplicado = ParametroWidget_Grupo.CheckRedundant(db, pwg);
+
+                            if (!duplicado)
+                            {
+                                ParametroWidget_Grupo.Insert(db, pwg);
+
+                                //insertamos un evento de info para registrar en BD
+                                Evento evReg = db.Evento.Create();
+                                evReg.TipoEventoID = 4;
+                                evReg.Asunto = "Inserción ParametroWidget_Grupo";
+                                evReg.Mensaje = item2.UsuarioID.ToString();
+                                evReg.FechaCreacion = DateTime.Now;
+                                Evento.Insert(db, evReg);
+                            }
                         }
 
                         //insertamos un evento de info una vez se hayan insertado todos los registros en BD
                         Evento evFin = db.Evento.Create();
                         evFin.TipoEventoID = 4;
-                        evFin.Asunto = "Inserción Compeltada";
+                        evFin.Asunto = "Inserción Completada";
                         evFin.Mensaje = "Proceso finalizado contra " + item.GrupoID;
                         evFin.FechaCreacion = DateTime.Now;
                         Evento.Insert(db, evFin);
@@ -105,7 +112,7 @@ namespace GenParametroWU
 
                     Evento ev = db.Evento.Create();
                     ev.TipoEventoID = 1;
-                    ev.Asunto = "Creacion de registro";
+                    ev.Asunto = "Error";
                     ev.Mensaje = ex.Message;
                     ev.FechaCreacion = DateTime.Now;
                     Evento.Insert(db, ev);

@@ -35,3 +35,21 @@ C:\Users\Goibe\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.c
 C:\Users\Goibe\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.csproj.CopyComplete
 C:\Users\Goibe\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.exe
 C:\Users\Goibe\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.pdb
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\GenParametroWU.exe.config
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\GenParametroWU.exe
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\GenParametroWU.pdb
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\Data.DBBOFCT.dll
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\EntityFramework.dll
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\Data.DBBOFCT.pdb
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\Data.DBBOFCT.dll.config
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\EntityFramework.xml
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.csprojAssemblyReference.cache
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.Form1.resources
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.Properties.Resources.resources
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.csproj.GenerateResource.cache
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.csproj.CoreCompileInputs.cache
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.csproj.CopyComplete
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.exe
+C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.pdb
