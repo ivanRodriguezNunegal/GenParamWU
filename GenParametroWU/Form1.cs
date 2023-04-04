@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace GenParametroWU
         #region Eventos
 
         #endregion
-    
+
 
         private void btnEjecutar_Click(object sender, EventArgs e)
         {
@@ -132,6 +133,13 @@ namespace GenParametroWU
 
                 }
             }
+        }
+
+        private void tablaXml_Click(object sender, EventArgs e)
+        {
+            //creamos una instancia de la clase DataToXml
+            DataToXml dataToXml = new DataToXml();
+            dataToXml.Execute();
         }
     }
 }

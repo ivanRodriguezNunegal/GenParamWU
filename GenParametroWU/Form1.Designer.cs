@@ -32,6 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnEjecutar = new System.Windows.Forms.Button();
             this.pgbrEjecucion = new System.Windows.Forms.ProgressBar();
+            this.tablaXml = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbGrupos
@@ -70,11 +71,22 @@
             this.pgbrEjecucion.Size = new System.Drawing.Size(376, 29);
             this.pgbrEjecucion.TabIndex = 3;
             // 
+            // tablaXml
+            // 
+            this.tablaXml.Location = new System.Drawing.Point(729, 119);
+            this.tablaXml.Name = "tablaXml";
+            this.tablaXml.Size = new System.Drawing.Size(199, 41);
+            this.tablaXml.TabIndex = 4;
+            this.tablaXml.Text = "Guardar Tabla a XML";
+            this.tablaXml.UseVisualStyleBackColor = true;
+            this.tablaXml.Click += new System.EventHandler(this.tablaXml_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.tablaXml);
             this.Controls.Add(this.pgbrEjecucion);
             this.Controls.Add(this.btnEjecutar);
             this.Controls.Add(this.label1);
@@ -93,6 +105,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnEjecutar;
         private System.Windows.Forms.ProgressBar pgbrEjecucion;
+        private System.Windows.Forms.Button tablaXml;
     }
 }
 

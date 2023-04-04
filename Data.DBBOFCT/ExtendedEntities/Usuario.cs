@@ -22,6 +22,12 @@ namespace Data.DBBOFCT
             return lista;
             
     }
-        
+        public static List<Usuario> GetList(BOFCTEntities db)
+        {
+            return (from u in db.Usuario
+                    orderby u.UsuarioID 
+                    select u).ToList();
+        }
+
     }
 }
