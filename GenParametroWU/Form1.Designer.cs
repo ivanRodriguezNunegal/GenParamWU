@@ -33,6 +33,7 @@
             this.btnEjecutar = new System.Windows.Forms.Button();
             this.pgbrEjecucion = new System.Windows.Forms.ProgressBar();
             this.tablaXml = new System.Windows.Forms.Button();
+            this.comboTablas = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // cbGrupos
@@ -73,7 +74,7 @@
             // 
             // tablaXml
             // 
-            this.tablaXml.Location = new System.Drawing.Point(729, 119);
+            this.tablaXml.Location = new System.Drawing.Point(747, 119);
             this.tablaXml.Name = "tablaXml";
             this.tablaXml.Size = new System.Drawing.Size(199, 41);
             this.tablaXml.TabIndex = 4;
@@ -81,11 +82,20 @@
             this.tablaXml.UseVisualStyleBackColor = true;
             this.tablaXml.Click += new System.EventHandler(this.tablaXml_Click);
             // 
+            // comboTablas
+            // 
+            this.comboTablas.FormattingEnabled = true;
+            this.comboTablas.Location = new System.Drawing.Point(745, 183);
+            this.comboTablas.Name = "comboTablas";
+            this.comboTablas.Size = new System.Drawing.Size(201, 24);
+            this.comboTablas.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.comboTablas);
             this.Controls.Add(this.tablaXml);
             this.Controls.Add(this.pgbrEjecucion);
             this.Controls.Add(this.btnEjecutar);
@@ -106,6 +116,7 @@
         private System.Windows.Forms.Button btnEjecutar;
         private System.Windows.Forms.ProgressBar pgbrEjecucion;
         private System.Windows.Forms.Button tablaXml;
+        private System.Windows.Forms.ComboBox comboTablas;
     }
 }
 

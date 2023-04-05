@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -12,74 +13,100 @@ using System.Xml;
 using System.Xml.Linq;
 using Data.DBBOFCT;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ComboBox = System.Windows.Forms.ComboBox;
+
 
 public partial class DataToXml
 {
-    public void Execute()
+    public void RellenarCombo(ComboBox comboBox)
     {
-        using (BOFCTEntities db = new BOFCTEntities())
+
+
+        // Create a connection to the local SQL Server database
+        SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123");
+
+        // Open the database connection
+        connection.Open();
+
+        // Get the list of table names from the database
+        SqlCommand command = new SqlCommand("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'", connection);
+        SqlDataReader reader = command.ExecuteReader();
+
+        // Loop through the table names and add them to the combobox
+        while (reader.Read())
         {
-            // Especificamos nombre de la tabla y ruta para guardar el archivo
-            string nombreTabla = "Usuario";
-            string path = @"C:\temp\MyData.xml";
+            string tableName = reader.GetString(0);
+            comboBox.Items.Add(tableName);
+        }
 
-            //lista con los datos de usuarios
-            List<Usuario> listaUsuarios = new List<Usuario>();
-            listaUsuarios = Usuario.GetList(db);
+        // Close the database connection
+        reader.Close();
+        connection.Close();
+    }
 
+    public void Execute(ComboBox comboBox)
+    {
 
-            //creamos documanto XML
-            XmlDocument xmlDocument = new XmlDocument();
-            XmlElement rootElement = xmlDocument.CreateElement("Table");
-            rootElement.SetAttribute("name", nombreTabla);
+        // Recuperamos el elemento seleccionado del comboBox
+        string tablaSeleccionada = comboBox.SelectedItem.ToString();
 
-            //recorremos los objetos en los datos de la lista de usuarios
-            foreach (Usuario obj in listaUsuarios)
+        // Hacemos la coexion SQL y lanzamos la query para recuperar los datos 
+        string connectionString = "Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123";
+        string query = "SELECT * FROM " + tablaSeleccionada;
+
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            // Comando SQL, le pasamos los parametros
+            SqlCommand command = new SqlCommand(query, connection);
+            connection.Open();
+            // Con "SqlDataReader" leemos los datos de la consulta realizada
+            SqlDataReader reader = command.ExecuteReader();
+
+            // Creamos documento XML y añadimos el elemento raiz con el nombre de la tabla
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlElement root = xmlDoc.CreateElement("Table");
+            root.SetAttribute("name", tablaSeleccionada);
+            xmlDoc.AppendChild(root);
+
+            // Vamos a iterar en cada fila de los datos y generar una "row" para cada una en el XML
+            while (reader.Read())
             {
-                //creamos cada "Row"
-                XmlElement rowElement = xmlDocument.CreateElement("Row");
+                XmlElement row = xmlDoc.CreateElement("row");
+                root.AppendChild(row);
 
-                // Recorremos las propiedades de cada usuario
-                foreach (var prop in typeof(Usuario).GetProperties())
+                // 5. For each column in the row, create a new "Column" element with the name of the column and the value of the data
+                for (int i = 0; i < reader.FieldCount; i++)
                 {
-                    // Creamos "Column" por cada propiedad
-                    XmlElement colElement = xmlDocument.CreateElement("Column");
-                    colElement.SetAttribute("name", prop.Name);
+                    string columnName = reader.GetName(i);
+                    // Comprobamos los null
+                    string columnValue = reader.IsDBNull(i) ? null : reader.GetValue(i).ToString();
 
-                    // Asignamos el valor dentro de la etiqueta "Value"
-                    XmlElement valElement = xmlDocument.CreateElement("Value");
-                    var value = prop.GetValue(obj);
+                    XmlElement column = xmlDoc.CreateElement("Column");
+                    column.SetAttribute("name", columnName);
 
-                    
-                    if (value != null)
+                    // Hacemos que "Row" esté dentro de "Column"
+                    row.AppendChild(column);
+
+                    XmlElement value = xmlDoc.CreateElement("Value");
+                    // En caso de que de null
+                    if (columnValue == null)
                     {
-                        valElement.InnerText = value.ToString();
+                        value.SetAttribute("isNull", "true");
                     }
-                    // Si elvalor es null lo indicamos creando el atributo correspondiente
                     else
                     {
-                        valElement.SetAttribute("isNull", "true");
+                        value.InnerText = columnValue;
                     }
-
-                    //"Value" irá dentro de "Column"
-                    colElement.AppendChild(valElement);
-
-                    // "Column" irá dentro de "Row"
-                    rowElement.AppendChild(colElement);
+                    column.AppendChild(value);
                 }
-                // "Row" irá dentro del elemento raiz "Table"
-                rootElement.AppendChild(rowElement);
             }
+            
 
-            // Añadimos el elemento raiz
-            xmlDocument.AppendChild(rootElement);
+            // Por ultimo vamos a guardar el documento generado en la ruta que deseemos 
+            string nombreXML = "C:\\temp\\" + tablaSeleccionada + ".xml";
+            xmlDoc.Save(nombreXML);
 
-            //guardamos el documento
-            xmlDocument.Save(path);
-
-            // Mostrar un mensaje al usuario que indique la ubicación del archivo donde se ha guardado el documento XML
-            MessageBox.Show("El documento XML ha sido creado y guardado en: " + path);
-
+            MessageBox.Show("Documento XML guardado en: " + nombreXML);
         }
     }
 }

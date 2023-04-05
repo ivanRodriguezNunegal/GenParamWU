@@ -35,6 +35,13 @@ namespace GenParametroWU
             cbGrupos.DataSource = listGrupos;
             cbGrupos.DisplayMember = "Nombre";
             cbGrupos.ValueMember = "GrupoID";
+
+
+            //rellenamos el combo de las tablas 
+            //creamos una instancia de la clase DataToXml
+            DataToXml dataToXml = new DataToXml();
+            dataToXml.RellenarCombo(comboTablas);
+
         }
 
 
@@ -137,9 +144,9 @@ namespace GenParametroWU
 
         private void tablaXml_Click(object sender, EventArgs e)
         {
-            //creamos una instancia de la clase DataToXml
+          //Creamos el documento XML
             DataToXml dataToXml = new DataToXml();
-            dataToXml.Execute();
+            dataToXml.Execute(comboTablas);
         }
     }
 }

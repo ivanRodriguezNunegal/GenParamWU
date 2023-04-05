@@ -53,3 +53,22 @@ C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.
 C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.csproj.CopyComplete
 C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.exe
 C:\Users\Ivan R\Source\Repos\GenParamWU\GenParametroWU\obj\Debug\GenParametroWU.pdb
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\GenParametroWU.exe.config
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\GenParametroWU.exe
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\GenParametroWU.pdb
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\Data.DBBOFCT.dll
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\EntityFramework.dll
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\Data.DBBOFCT.pdb
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\Data.DBBOFCT.dll.config
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\EntityFramework.xml
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.csproj.AssemblyReference.cache
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.csproj.SuggestedBindingRedirects.cache
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.Form1.resources
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.Properties.Resources.resources
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.csproj.GenerateResource.cache
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.csproj.CoreCompileInputs.cache
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.csproj.CopyComplete
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.exe
+C:\Users\Goibe\source\repos\GenParamWU - copia\GenParametroWU\obj\Debug\GenParametroWU.pdb
