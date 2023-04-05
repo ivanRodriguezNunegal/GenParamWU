@@ -19,56 +19,67 @@ public partial class DataToXml
     {
         using (BOFCTEntities db = new BOFCTEntities())
         {
+            // Especificamos nombre de la tabla y ruta para guardar el archivo
             string nombreTabla = "Usuario";
+            string path = @"C:\temp\MyData.xml";
 
             //lista con los datos de usuarios
             List<Usuario> listaUsuarios = new List<Usuario>();
             listaUsuarios = Usuario.GetList(db);
 
-            //creamos un nuevo documento XML
-            XmlDocument xmlDoc = new XmlDocument();
 
-            //ruta donde guardatemos el documento
-            string path = @"c:\temp\dataTablaUsuario.xml";
+            //creamos documanto XML
+            XmlDocument xmlDocument = new XmlDocument();
+            XmlElement rootElement = xmlDocument.CreateElement("Table");
+            rootElement.SetAttribute("name", nombreTabla);
 
-            // Elemento raiz
-            XmlElement root = xmlDoc.CreateElement("Table");
-            root.SetAttribute("name", nombreTabla);
-            xmlDoc.AppendChild(root);
-
-            // miramos que tipo de objetos contiene lista suuarios
-            Type objectType = listaUsuarios[0].GetType();
-
-            // bucleamos entre las propiedades del objeto
-            foreach (var prop in objectType.GetProperties())
+            //recorremos los objetos en los datos de la lista de usuarios
+            foreach (Usuario obj in listaUsuarios)
             {
-                XmlElement column = xmlDoc.CreateElement("Column");
-                column.SetAttribute("name", prop.Name);//nombre para el atributo de cada column
-                root.AppendChild(column);
+                //creamos cada "Row"
+                XmlElement rowElement = xmlDocument.CreateElement("Row");
 
-                foreach (var obj in listaUsuarios)
+                // Recorremos las propiedades de cada usuario
+                foreach (var prop in typeof(Usuario).GetProperties())
                 {
-                    // Cogemos los valores dentro de cada column
-                    object value = prop.GetValue(obj, null);
+                    // Creamos "Column" por cada propiedad
+                    XmlElement colElement = xmlDocument.CreateElement("Column");
+                    colElement.SetAttribute("name", prop.Name);
 
-                    XmlElement valueElem = xmlDoc.CreateElement("Value");
-                    if (value == null)
+                    // Asignamos el valor dentro de la etiqueta "Value"
+                    XmlElement valElement = xmlDocument.CreateElement("Value");
+                    var value = prop.GetValue(obj);
+
+                    
+                    if (value != null)
                     {
-                        valueElem.SetAttribute("isNull", "true");
+                        valElement.InnerText = value.ToString();
                     }
+                    // Si elvalor es null lo indicamos creando el atributo correspondiente
                     else
                     {
-                        valueElem.InnerText = value.ToString();
+                        valElement.SetAttribute("isNull", "true");
                     }
-                    column.AppendChild(valueElem);
+
+                    //"Value" irá dentro de "Column"
+                    colElement.AppendChild(valElement);
+
+                    // "Column" irá dentro de "Row"
+                    rowElement.AppendChild(colElement);
                 }
+                // "Row" irá dentro del elemento raiz "Table"
+                rootElement.AppendChild(rowElement);
             }
 
-            // Guardamos el xml en una ruta que queramos
-            xmlDoc.Save(path);
+            // Añadimos el elemento raiz
+            xmlDocument.AppendChild(rootElement);
 
-            // Le hacemos saber al usuario donde se ha guardado el documento
-            MessageBox.Show("Documento XML guardado en: " + Path.GetFullPath(path), "Process Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //guardamos el documento
+            xmlDocument.Save(path);
+
+            // Mostrar un mensaje al usuario que indique la ubicación del archivo donde se ha guardado el documento XML
+            MessageBox.Show("El documento XML ha sido creado y guardado en: " + path);
+
         }
     }
 }
