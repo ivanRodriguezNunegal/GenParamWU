@@ -36,7 +36,7 @@ public class DataToXml
 
 
         // Create a connection to the local SQL Server database
-        SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123");
+        SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;Integrated Security=SSPI;");
 
         // Open the database connection
         connection.Open();
@@ -73,24 +73,36 @@ public class DataToXml
                 ids += idActual.ToString() + ",";
             }
             ids = ids.TrimEnd(',');
-        }
-        XDocument xmlDoc = new XDocument();
+            XDocument xmlDoc = new XDocument();
 
-        // Iteramos y vamos ejecutando la query 
-        foreach (var item in infoBackup.Select(bs => bs.NameTable))
-        {
             // Recuperamos los datos de la sentencia SQL
-            string query2 = "SELECT * FROM " + item + " WHERE " + item + "ID IN (" + ids + ")";
-            using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123"))
+            string query2 = "SELECT * FROM " + item.NameTable + " WHERE " + item.NameTable + "ID IN (" + ids + ")";
+            using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;Integrated Security=SSPI;"))
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand(query2, connection);
                 SqlDataReader reader = command.ExecuteReader();
+                SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                dataAdapter.SelectCommand = command;
+
+                DataTable tbl = new DataTable();
+                dataAdapter.Fill(tbl);
+
+
+                foreach (DataRow rw in tbl.Rows)
+                {
+                    //recorremos una a una las filas
+                    foreach (var col in rw.ItemArray)
+                    {
+                        //recorremos uno a uno los campos de la fila 
+                    }
+                }
+
 
                 // Miramos cada fila y vamos añadiendo los datos al XML
                 while (reader.Read())
                 {
-                    var table = infoBackup.FirstOrDefault(t => t.NameTable == item);
+                    var table = infoBackup.FirstOrDefault(t => t.NameTable == item.NameTable);
                     if (table == null)
                     {
                         continue;
@@ -116,25 +128,26 @@ public class DataToXml
                         rowElement.Add(columnElement);
                     }
 
-                    XElement tableElement = new XElement("Table", new XAttribute("name", item));
+                    XElement tableElement = new XElement("Table", new XAttribute("name", item.NameTable));
                     tableElement.Add(rowElement);
                     xmlDoc.Add(tableElement);
                 }
 
                 reader.Close();
             }
+
+
+            // Agregamos un elemento raíz "Tables"
+            XElement tablesElement = new XElement("Tables");
+            tablesElement.Add(xmlDoc.Root);
+            xmlDoc.Root.ReplaceWith(tablesElement);
+
+            // Por ultimo vamos a guardar el documento generado en la ruta que deseemos 
+            string nombreXML = "C:\\temp\\" + "prueba" + ".xml";
+            xmlDoc.Save(nombreXML);
+
+            MessageBox.Show("Documento XML guardado en: " + nombreXML);
         }
-
-        // Agregamos un elemento raíz "Tables"
-        XElement tablesElement = new XElement("Tables");
-        tablesElement.Add(xmlDoc.Root);
-        xmlDoc.Root.ReplaceWith(tablesElement);
-
-        // Por ultimo vamos a guardar el documento generado en la ruta que deseemos 
-        string nombreXML = "C:\\temp\\" + "prueba" + ".xml";
-        xmlDoc.Save(nombreXML);
-
-        MessageBox.Show("Documento XML guardado en: " + nombreXML);
     }
 
 
