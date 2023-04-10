@@ -81,6 +81,16 @@ public class DataToXml
                 //cogemos la tabla de item.NameTable
                 //cogemos los registros de item.IDBackup
 
+                string ids = "";
+                foreach (int idActual in item.IDBackup)
+                {
+                    ids += idActual.ToString();
+                    ids = ids + ",";
+                }
+
+
+
+                string query = "SELECT * FROM " + tablaSeleccionada + " WHERE " + tablaSeleccionada + "ID IN (" + ids + ")";
 
             }
         }
@@ -93,8 +103,6 @@ public class DataToXml
 
 
 
-        // Recuperamos el elemento seleccionado del comboBox
-        string tablaSeleccionada = comboBox.SelectedItem.ToString();
 
         // Hacemos la coexion SQL y lanzamos la query para recuperar los datos 
         string connectionString = "Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123";

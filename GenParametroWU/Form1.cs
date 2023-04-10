@@ -147,6 +147,38 @@ namespace GenParametroWU
           //Creamos el documento XML
             DataToXml dataToXml = new DataToXml();
             dataToXml.Execute(comboTablas);
+
+            List<DataToXml.BackupStructure> listTables = new List<DataToXml.BackupStructure>();
+            DataToXml.BackupStructure tabla = new DataToXml.BackupStructure();
+
+            tabla.NameTable = "Usuarios";
+            tabla.IDBackup.Add(1);
+            tabla.IDBackup.Add(4);
+            tabla.IDBackup.Add(5);
+
+            listTables.Add(tabla);
+
+            tabla.IDBackup.Clear();
+            tabla.NameTable = "GrupoUsuario";
+            tabla.IDBackup.Add(4);
+            tabla.IDBackup.Add(6);
+            tabla.IDBackup.Add(8);
+
+            listTables.Add(tabla);
+
+            tabla.IDBackup.Clear();
+            tabla.NameTable = "Grupo";
+            tabla.IDBackup.Add(7);
+            tabla.IDBackup.Add(3);
+            tabla.IDBackup.Add(2);
+
+            listTables.Add(tabla);
+
+            dataToXml.Execute(listTables);
+
+
+
+
         }
     }
 }
