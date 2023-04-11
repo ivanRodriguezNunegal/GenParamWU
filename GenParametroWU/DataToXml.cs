@@ -63,94 +63,66 @@ public class DataToXml
     /// </summary>
     /// <param name="comboBox"></param>
     public void Execute(List<BackupStructure> infoBackup)
-    {    //procesamos
+    {
+        XDocument xmlDoc = new XDocument();
+        XElement tablesElement = new XElement("Tables");
 
-        string ids = "";
+        // Hacemos bucle dentro de las tablas que recibimos en infoBackup
         foreach (BackupStructure item in infoBackup)
         {
-            foreach (int idActual in item.IDBackup)
-            {
-                ids += idActual.ToString() + ",";
-            }
-            ids = ids.TrimEnd(',');
-            XDocument xmlDoc = new XDocument();
+            string ids = string.Join(",", item.IDBackup);
+            XDocument tableXmlDoc = new XDocument();
 
             // Recuperamos los datos de la sentencia SQL
-            string query2 = "SELECT * FROM " + item.NameTable + " WHERE " + item.NameTable + "ID IN (" + ids + ")";
-            using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;Integrated Security=SSPI;"))
+            string query = "SELECT * FROM " + item.NameTable + " WHERE " + item.NameTable + "ID IN (" + ids + ")";
+            using (SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123"))
             {
                 connection.Open();
-                SqlCommand command = new SqlCommand(query2, connection);
-                SqlDataReader reader = command.ExecuteReader();
+                SqlCommand command = new SqlCommand(query, connection);
+
                 SqlDataAdapter dataAdapter = new SqlDataAdapter();
                 dataAdapter.SelectCommand = command;
 
                 DataTable tbl = new DataTable();
                 dataAdapter.Fill(tbl);
 
+                XElement tableElement = new XElement("Table", new XAttribute("name", item.NameTable));
 
-                foreach (DataRow rw in tbl.Rows)
+                //bucleamos para cad una de las filas
+                foreach (DataRow row in tbl.Rows)
                 {
-                    //recorremos una a una las filas
-                    foreach (var col in rw.ItemArray)
-                    {
-                        //recorremos uno a uno los campos de la fila 
-                    }
-                }
-
-
-                // Miramos cada fila y vamos añadiendo los datos al XML
-                while (reader.Read())
-                {
-                    var table = infoBackup.FirstOrDefault(t => t.NameTable == item.NameTable);
-                    if (table == null)
-                    {
-                        continue;
-                    }
-
                     XElement rowElement = new XElement("row");
 
-                    // Añadimos a row, cada uno de los datos que queremos guardar en el documento
-                    for (int i = 0; i < reader.FieldCount; i++)
+                    // Iteramos para cada una de las columnas
+                    foreach (DataColumn col in tbl.Columns)
                     {
-                        string columnName = reader.GetName(i);
-                        if (!table.IDBackup.Contains(i))
-                        {
-                            continue;
-                        }
+                        string columnName = col.ColumnName;
+                        object columnValue = row[col];
 
                         XElement columnElement = new XElement("Column", new XAttribute("name", columnName));
-                        //si es null añadimos el atributto isnull
-                        XAttribute valueAttribute = new XAttribute("isNull", reader.IsDBNull(i) ? "true" : "false");
-                        XElement valueElement = new XElement("Value", reader.GetValue(i));
+                        XAttribute valueAttribute = new XAttribute("isNull", (columnValue == null || columnValue == DBNull.Value) ? "true" : "false");
+                        XElement valueElement = new XElement("Value", columnValue);
                         valueElement.Add(valueAttribute);
                         columnElement.Add(valueElement);
+
                         rowElement.Add(columnElement);
                     }
 
-                    XElement tableElement = new XElement("Table", new XAttribute("name", item.NameTable));
                     tableElement.Add(rowElement);
-                    xmlDoc.Add(tableElement);
                 }
 
-                reader.Close();
+                tablesElement.Add(tableElement);
             }
-
-
-            // Agregamos un elemento raíz "Tables"
-            XElement tablesElement = new XElement("Tables");
-            tablesElement.Add(xmlDoc.Root);
-            xmlDoc.Root.ReplaceWith(tablesElement);
-
-            // Por ultimo vamos a guardar el documento generado en la ruta que deseemos 
-            string nombreXML = "C:\\temp\\" + "prueba" + ".xml";
-            xmlDoc.Save(nombreXML);
-
-            MessageBox.Show("Documento XML guardado en: " + nombreXML);
         }
+
+        xmlDoc.Add(tablesElement);
+
+        // Por ultimo vamos a guardar el documento generado en la ruta que deseemos 
+        string nombreXML = "C:\\temp\\" + "prueba" + ".xml";
+        xmlDoc.Save(nombreXML);
+
+        MessageBox.Show("Documento XML guardado en: " + nombreXML);
     }
-
-
 
     public void Execute(ComboBox comboBox)
     {

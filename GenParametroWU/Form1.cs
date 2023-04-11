@@ -145,39 +145,25 @@ namespace GenParametroWU
         private void tablaXml_Click(object sender, EventArgs e)
         {
 
-            //Creamos el documento XML
+            //Creamos instancia
             DataToXml dataToXml = new DataToXml();
 
-
-
             List<DataToXml.BackupStructure> listTables = new List<DataToXml.BackupStructure>();
-            DataToXml.BackupStructure tabla = new DataToXml.BackupStructure();
 
-            tabla.NameTable = "";
-            tabla.IDBackup = new List<int>();
+            DataToXml.BackupStructure tabla1 = new DataToXml.BackupStructure();
+            tabla1.NameTable = "Grupo";
+            tabla1.IDBackup = new List<int> { 4, 7, 15 };
+            listTables.Add(tabla1);
 
-            tabla.NameTable = "Grupo";
-            tabla.IDBackup.Add(4);
-            tabla.IDBackup.Add(7);
-            tabla.IDBackup.Add(15);
+            DataToXml.BackupStructure tabla2 = new DataToXml.BackupStructure();
+            tabla2.NameTable = "GrupoUsuario";
+            tabla2.IDBackup = new List<int> { 10, 12, 14 };
+            listTables.Add(tabla2);
 
-            listTables.Add(tabla);
-
-            tabla.IDBackup.Clear();
-            tabla.NameTable = "GrupoUsuario";
-            tabla.IDBackup.Add(10);
-            tabla.IDBackup.Add(12);
-            tabla.IDBackup.Add(14);
-
-            listTables.Add(tabla);
-
-            tabla.IDBackup.Clear();
-            tabla.NameTable = "Usuario";
-            tabla.IDBackup.Add(15);
-            tabla.IDBackup.Add(18);
-            tabla.IDBackup.Add(53);
-
-            listTables.Add(tabla);
+            DataToXml.BackupStructure tabla3 = new DataToXml.BackupStructure();
+            tabla3.NameTable = "Usuario";
+            tabla3.IDBackup = new List<int> { 15, 18, 53 };
+            listTables.Add(tabla3);
 
             dataToXml.Execute(listTables);
 
