@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Data.DBBOFCT;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ComboBox = System.Windows.Forms.ComboBox;
@@ -187,6 +188,89 @@ public class DataToXml
             xmlDoc.Save(nombreXML);
 
             MessageBox.Show("Documento XML guardado en: " + nombreXML);
+        }
+    }
+
+    public void RestoreFromXml()
+    {
+        // Creamos instancia
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+
+        // Hcemos que solo nos filtre por archivos "XML"
+        openFileDialog.Filter = "XML files (*.xml)|*.xml";
+
+        // Ventana para que el usuario seleccione el archivo
+        DialogResult result = openFileDialog.ShowDialog();
+
+        // Si el usuario aha pulsado ok...
+        if (result == DialogResult.OK)
+        {
+            // Cogemos la rta del archivo seleccionado
+            string filePath = openFileDialog.FileName;
+
+            // Carga el archivo XML
+            XmlDocument doc = new XmlDocument();
+            doc.Load(filePath);
+
+            // Crea un "Dictionary" para almacenar las "List" por nombre de tabla
+            Dictionary<string, List<Dictionary<string, string>>> tablas = new Dictionary<string, List<Dictionary<string, string>>>();
+
+            // Vamos a hacer un bucle que recorrerá cada uno de nuestros nodos "Table"
+            foreach (XmlNode tablaNode in doc.SelectNodes("//Table"))
+            {
+                string nombreTabla = tablaNode.Attributes["name"].Value;
+
+                // Crea una nueva lista para la cada una de las tablas si no existe
+                if (!tablas.ContainsKey(nombreTabla))
+                {
+                    tablas[nombreTabla] = new List<Dictionary<string, string>>();
+                }
+
+                // Recorre cada fila en la tabla
+                foreach (XmlNode filaNode in tablaNode.SelectNodes("row"))
+                {
+                    Dictionary<string, string> fila = new Dictionary<string, string>();
+
+                    // Recorre cada columna en la fila
+                    foreach (XmlNode columnaNode in filaNode.SelectNodes("Column"))
+                    {
+                        string nombreColumna = columnaNode.Attributes["name"].Value;
+                        string valorColumna = null;
+
+                        // Obtiene el valor de la columna si no es nulo
+                        XmlNode valorNode = columnaNode.SelectSingleNode("Value");
+                        if (valorNode != null && valorNode.Attributes?["isNull"]?.Value != "true")
+                        {
+                            valorColumna = valorNode.InnerText;
+                        }
+
+                        // Agrega el valor de la columna al diccionario de la fila
+                        fila[nombreColumna] = valorColumna;
+                    }
+
+                    // Agrega la fila a la lista de la tabla
+                    tablas[nombreTabla].Add(fila);
+                }
+            }
+
+            // Por ultimo, comprobamos los datos por consola
+            foreach (string nombreTabla in tablas.Keys)
+            {
+                Console.WriteLine($"Tabla {nombreTabla}:");
+
+                // Recorre cada fila en la tabla y muestra sus datos por consola
+                foreach (Dictionary<string, string> fila in tablas[nombreTabla])
+                {
+                    Console.WriteLine("Fila:");
+                    foreach (string nombreColumna in fila.Keys)
+                    {
+                        Console.WriteLine($"  {nombreColumna}: {fila[nombreColumna]}");
+                    }
+                }
+            }
+
+
+
         }
     }
 }

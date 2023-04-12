@@ -146,6 +146,7 @@ namespace GenParametroWU
         {
 
             //Creamos instancia
+            /*
             DataToXml dataToXml = new DataToXml();
 
             List<DataToXml.BackupStructure> listTables = new List<DataToXml.BackupStructure>();
@@ -166,10 +167,18 @@ namespace GenParametroWU
             listTables.Add(tabla3);
 
             dataToXml.Execute(listTables);
+            */
 
+            /*
+            DataToXml dataToXml = new DataToXml();
+            dataToXml.Execute(comboTablas);
+            */   
+        }
 
-
-
+        private void btnFromXML_Click(object sender, EventArgs e)
+        {
+            DataToXml dataToXml = new DataToXml();
+            dataToXml.RestoreFromXml();
         }
     }
 }

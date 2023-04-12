@@ -34,6 +34,7 @@
             this.pgbrEjecucion = new System.Windows.Forms.ProgressBar();
             this.tablaXml = new System.Windows.Forms.Button();
             this.comboTablas = new System.Windows.Forms.ComboBox();
+            this.btnFromXML = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbGrupos
@@ -90,11 +91,22 @@
             this.comboTablas.Size = new System.Drawing.Size(201, 24);
             this.comboTablas.TabIndex = 5;
             // 
+            // btnFromXML
+            // 
+            this.btnFromXML.Location = new System.Drawing.Point(164, 295);
+            this.btnFromXML.Name = "btnFromXML";
+            this.btnFromXML.Size = new System.Drawing.Size(132, 56);
+            this.btnFromXML.TabIndex = 6;
+            this.btnFromXML.Text = "Cargar datos desde XML";
+            this.btnFromXML.UseVisualStyleBackColor = true;
+            this.btnFromXML.Click += new System.EventHandler(this.btnFromXML_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.btnFromXML);
             this.Controls.Add(this.comboTablas);
             this.Controls.Add(this.tablaXml);
             this.Controls.Add(this.pgbrEjecucion);
@@ -117,6 +129,7 @@
         private System.Windows.Forms.ProgressBar pgbrEjecucion;
         private System.Windows.Forms.Button tablaXml;
         private System.Windows.Forms.ComboBox comboTablas;
+        private System.Windows.Forms.Button btnFromXML;
     }
 }
 
