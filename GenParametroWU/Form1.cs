@@ -177,8 +177,11 @@ namespace GenParametroWU
 
         private void btnFromXML_Click(object sender, EventArgs e)
         {
-            DataToXml dataToXml = new DataToXml();
-            dataToXml.RestoreFromXml();
+            using (BOFCTEntities db = new BOFCTEntities())
+            {
+                DataToXml dataToXml = new DataToXml();
+                dataToXml.RestoreFromXml(db);
+            }
         }
     }
 }

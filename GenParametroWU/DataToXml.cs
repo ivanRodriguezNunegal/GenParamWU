@@ -63,7 +63,7 @@ public class DataToXml
     /// Hacemos backup de varias tablas con los registros indicados en el parámetro
     /// </summary>
     /// <param name="comboBox"></param>
-    public void Execute(List<BackupStructure> infoBackup)
+    public void Execute(BOFCTEntities db, List<BackupStructure> infoBackup)
     {
         XDocument xmlDoc = new XDocument();
         XElement tablesElement = new XElement("Tables");
@@ -191,7 +191,7 @@ public class DataToXml
         }
     }
 
-    public void RestoreFromXml()
+    public void RestoreFromXml(BOFCTEntities db)
     {
         // Creamos instancia
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -252,6 +252,83 @@ public class DataToXml
                     tablas[nombreTabla].Add(fila);
                 }
             }
+
+
+            //sacamos la lista de grupousuarios
+            List<GrupoUsuario> listaGu = new List<GrupoUsuario>();
+            //listaGu = LA EXTRAES DEL DICCIONARIO
+            List<Usuario> listaUser = new List<Usuario>();
+            //listaUser = LA EXTRAES DEL DICCIONARIO
+            List<Grupo> listaGrupo = new List<Grupo>();
+            //listaGrupo = LA EXTRAES DEL DICCIONARIO
+
+
+            //recorremos la lista de grupousuarios
+            foreach (GrupoUsuario grupoUsuario in listaGu)
+            {
+                //inicializamos el grupousuario
+                GrupoUsuario newGu = db.GrupoUsuario.Create();
+
+                //buscamos el UsuarioID del item que estamos recorriendo en la lista de Usuarios
+                //si lo encontramos, damos de alta antes el Usuario para poder vincularlo
+                //si no, continuamos con el siguiente elemento
+
+                Usuario userToCreate = listaUser.Find(p => p.UsuarioID == grupoUsuario.UsuarioID);
+                Usuario newUser = new Usuario();
+                if (userToCreate != null)
+                {
+                    //lo creamos
+                    newUser = db.Usuario.Create();
+                    //igualamos todos los campos
+                    newUser.Nombre = userToCreate.Nombre;
+                    //etc.
+
+                    db.Usuario.Add(newUser);
+                    //Lo eliminamos, es la manera de "marcar" que ya está creado
+                    listaUser.Remove(userToCreate);
+                }
+                else
+                {
+                    //nos vamos a la siguiente iteracion 
+                    continue;
+                }
+
+                /*
+                //AHORA HACEMOS LO MISMO CON GRUPO
+                *
+                * *
+                * *
+                * *
+                */
+              
+
+                //Y AHORA ESTABLECEMOS LA RELACION
+                newGu.Usuario = newUser;
+                //Y....
+                //newGu.Grupo = newGrupo
+
+                db.GrupoUsuario.Add(newGu);
+
+            }
+
+
+            //UNA VEZ HECHO ESTO, NOS RECORREMOS LA LISTA DE USUARIOS Y LA LISTA 
+            //DE GRUPOS, POR SI NOS QUEDÓ ALGUNO QUE NO HEMOS DADO DE ALTA AL NO
+            //ESTAR RELACIONADO CON NINGUN GRUPOUSUARIO
+
+
+            //Y POR ÚLTIMO, HACEMOS EL COMMIT, ES DECIR, PLASMAMOS LO QUE HEMOS HECHO
+            //EN LA BASE DE DATOS
+
+            db.SaveChanges();
+
+
+
+
+
+
+
+
 
             // Por ultimo, comprobamos los datos por consola
             foreach (string nombreTabla in tablas.Keys)
