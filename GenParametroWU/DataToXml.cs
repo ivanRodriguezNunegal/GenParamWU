@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,7 +18,6 @@ using System.Xml.Serialization;
 using Data.DBBOFCT;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ComboBox = System.Windows.Forms.ComboBox;
-
 
 public class DataToXml
 {
@@ -34,8 +36,6 @@ public class DataToXml
     /// <param name="comboBox"></param>
     public void RellenarCombo(ComboBox comboBox)
     {
-
-
         // Create a connection to the local SQL Server database
         SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;Integrated Security=SSPI;");
 
@@ -57,7 +57,6 @@ public class DataToXml
         reader.Close();
         connection.Close();
     }
-
 
     /// <summary>
     /// Hacemos backup de varias tablas con los registros indicados en el parámetro
@@ -182,7 +181,6 @@ public class DataToXml
                 }
             }
 
-
             // Por ultimo vamos a guardar el documento generado en la ruta que deseemos 
             string nombreXML = "C:\\temp\\" + tablaSeleccionada + ".xml";
             xmlDoc.Save(nombreXML);
@@ -253,15 +251,87 @@ public class DataToXml
                 }
             }
 
-
             //sacamos la lista de grupousuarios
             List<GrupoUsuario> listaGu = new List<GrupoUsuario>();
             //listaGu = LA EXTRAES DEL DICCIONARIO
-            List<Usuario> listaUser = new List<Usuario>();
-            //listaUser = LA EXTRAES DEL DICCIONARIO
-            List<Grupo> listaGrupo = new List<Grupo>();
-            //listaGrupo = LA EXTRAES DEL DICCIONARIO
+            if (tablas.ContainsKey("GrupoUsuario"))
+            {
+                // Obtener la lista de diccionarios correspondiente
+                List<Dictionary<string, string>> listaDiccionarios = tablas["GrupoUsuario"];
 
+                // Vamos a crear un bucle para que nos genere los diferentes objetos a partir de las listas de "Dictionary"
+                foreach (Dictionary<string, string> diccionario in listaDiccionarios)
+                {
+                    GrupoUsuario gu = new GrupoUsuario();
+
+                    // Asignar los valores del diccionario a las propiedades del objeto GrupoUsuario
+                    gu.GrupoUsuarioID = int.Parse(diccionario["GrupoUsuarioID"]);
+                    gu.UsuarioID = int.Parse(diccionario["UsuarioID"]);
+                    gu.GrupoID = int.Parse(diccionario["GrupoID"]);
+
+                    // Agregamos el objeto a la lista
+                    listaGu.Add(gu);
+                }
+
+            }
+
+            //listaUser = LA EXTRAES DEL DICCIONARIO
+            List<Usuario> listaUser = new List<Usuario>();
+
+            if (tablas.ContainsKey("Usuario"))
+            {
+                List<Dictionary<string, string>> listaDiccionarios = tablas["Usuario"];
+
+                // Vamos a crear un bucle para que nos genere los diferentes objetos a partir de las listas de "Dictionary"
+                foreach (Dictionary<string, string> diccionario in listaDiccionarios)
+                {
+                    Usuario usuario = new Usuario();
+
+                    usuario.UsuarioID = int.Parse(diccionario["UsuarioID"]);
+                    usuario.Login = diccionario["Login"];
+                    usuario.Nombre = diccionario["Nombre"];
+                    usuario.Descripcion = diccionario["Descripcion"];
+                    usuario.Activo = bool.Parse(diccionario["Activo"]);
+
+
+                    usuario.FechaCreacion = diccionario["FechaCreacion"] != null ?
+                        DateTime.TryParse(diccionario["FechaCreacion"], out DateTime createdDate) ? createdDate : DateTime.MinValue : DateTime.MinValue;
+
+                    usuario.FechaActualizacion = diccionario["FechaActualizacion"] != null ?
+                        DateTime.TryParse(diccionario["FechaActualizacion"], out DateTime updatedDate) ? updatedDate : DateTime.MinValue : DateTime.MinValue;
+
+                    usuario.IDEmpleado = diccionario["IDEmpleado"] != null ?
+                        int.TryParse(diccionario["IDEmpleado"], out int employeeId) ? employeeId : 0 : 0;
+
+                    usuario.GlobalEmployeeID = diccionario["GlobalEmployeeID"] != null ?
+                        int.TryParse(diccionario["GlobalEmployeeID"], out int globalEmployeeId) ? globalEmployeeId : 0 : 0;
+
+
+                    // Agregamos el objeto a la lista
+                    listaUser.Add(usuario);
+                }
+            }
+
+            //listaGrupo = LA EXTRAES DEL DICCIONARIO
+            List<Grupo> listaGrupo = new List<Grupo>();
+
+            if (tablas.ContainsKey("Grupo"))
+            {
+                List<Dictionary<string, string>> listaDiccionarios = tablas["Grupo"];
+
+                // Vamos a crear un bucle para que nos genere los diferentes objetos a partir de las listas de "Dictionary"
+                foreach (Dictionary<string, string> diccionario in listaDiccionarios)
+                {
+                    Grupo grupo = new Grupo();
+
+                    grupo.GrupoID = int.Parse(diccionario["GrupoID"]);
+                    grupo.Nombre = diccionario["Nombre"];
+                    grupo.Descripcion = diccionario["Descripcion"];
+
+                    // Agregamos el objeto a la lista
+                    listaGrupo.Add(grupo);
+                }
+            }
 
             //recorremos la lista de grupousuarios
             foreach (GrupoUsuario grupoUsuario in listaGu)
@@ -293,60 +363,116 @@ public class DataToXml
                     continue;
                 }
 
-                /*
                 //AHORA HACEMOS LO MISMO CON GRUPO
-                *
-                * *
-                * *
-                * *
-                */
-              
+                Grupo groupToCreate = listaGrupo.Find(g => g.GrupoID == grupoUsuario.GrupoID);
+                Grupo newGrupo = new Grupo();
+                if (groupToCreate != null)
+                {
+                    //lo creamos
+                    newGrupo = db.Grupo.Create();
+                    //igualamos todos los campos
+                    newGrupo.Nombre = groupToCreate.Nombre;
+                    //etc.
+
+                    db.Grupo.Add(newGrupo);
+                    //Lo eliminamos, es la manera de "marcar" que ya está creado
+                    listaGrupo.Remove(groupToCreate);
+                }
+                else
+                {
+                    //nos vamos a la siguiente iteracion 
+                    continue;
+                }
 
                 //Y AHORA ESTABLECEMOS LA RELACION
                 newGu.Usuario = newUser;
                 //Y....
-                //newGu.Grupo = newGrupo
+                newGu.Grupo = newGrupo;
 
                 db.GrupoUsuario.Add(newGu);
 
             }
 
-
             //UNA VEZ HECHO ESTO, NOS RECORREMOS LA LISTA DE USUARIOS Y LA LISTA 
             //DE GRUPOS, POR SI NOS QUEDÓ ALGUNO QUE NO HEMOS DADO DE ALTA AL NO
             //ESTAR RELACIONADO CON NINGUN GRUPOUSUARIO
+            foreach (var user in listaUser)
+            {
+                // Verificar si el usuario no existe en la base de datos
+                if (!db.Usuario.Any(u => u.Nombre == user.Nombre))
+                {
+                    // Si no existe, crear un nuevo usuario en la base de datos
+                    var newUser = new Usuario
+                    {
+                        UsuarioID = user.UsuarioID,
+                        Login = user.Login,
+                        Nombre = user.Nombre,
+                        Descripcion = user.Descripcion,
+                        Activo = user.Activo,
+                        FechaCreacion = user.FechaCreacion,
+                        FechaActualizacion = user.FechaActualizacion,
+                        IDEmpleado = user.IDEmpleado,
+                        GlobalEmployeeID = user.GlobalEmployeeID,
+                        
+                    };
+                    db.Usuario.Add(newUser);
+                }
+            }
 
+            foreach (var group in listaGrupo)
+            {
+                // Verificar si el grupo no existe en la base de datos
+                if (!db.Grupo.Any(g => g.Nombre == group.Nombre))
+                {
+                    // Si no existe, crear un nuevo grupo en la base de datos
+                    var newGroup = new Grupo
+                    {
+                        GrupoID = group.GrupoID,
+                        Nombre = group.Nombre,
+                        Descripcion = group.Descripcion,
+                        
+                    };
+                    db.Grupo.Add(newGroup);
+                }
+            }
 
             //Y POR ÚLTIMO, HACEMOS EL COMMIT, ES DECIR, PLASMAMOS LO QUE HEMOS HECHO
             //EN LA BASE DE DATOS
 
-            db.SaveChanges();
 
-
-
-
-
-
-
-
-
-            // Por ultimo, comprobamos los datos por consola
-            foreach (string nombreTabla in tablas.Keys)
+            // Try catch para interceptar los errores 
+            try
             {
-                Console.WriteLine($"Tabla {nombreTabla}:");
-
-                // Recorre cada fila en la tabla y muestra sus datos por consola
-                foreach (Dictionary<string, string> fila in tablas[nombreTabla])
+                db.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var validationResult in ex.EntityValidationErrors)
                 {
-                    Console.WriteLine("Fila:");
-                    foreach (string nombreColumna in fila.Keys)
+                    foreach (var error in validationResult.ValidationErrors)
                     {
-                        Console.WriteLine($"  {nombreColumna}: {fila[nombreColumna]}");
+                        Console.WriteLine("{0}: {1}", error.PropertyName, error.ErrorMessage);
                     }
                 }
             }
 
+            /*
+                        // Comprobamos los datos por consola
+                        foreach (string nombreTabla in tablas.Keys)
+                        {
+                            Console.WriteLine($"Tabla {nombreTabla}:");
 
+                            // Recorre cada fila en la tabla y muestra sus datos por consola
+                            foreach (Dictionary<string, string> fila in tablas[nombreTabla])
+                            {
+                                Console.WriteLine("Fila:");
+                                foreach (string nombreColumna in fila.Keys)
+                                {
+                                    Console.WriteLine($"  {nombreColumna}: {fila[nombreColumna]}");
+                                }
+                            }
+                        }
+            */
 
         }
     }
