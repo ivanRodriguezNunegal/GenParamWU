@@ -350,8 +350,15 @@ public class DataToXml
                     //lo creamos
                     newUser = db.Usuario.Create();
                     //igualamos todos los campos
+                    newUser.UsuarioID = userToCreate.UsuarioID;
+                    newUser.Login = userToCreate.Login;
                     newUser.Nombre = userToCreate.Nombre;
-                    //etc.
+                    newUser.Descripcion = userToCreate.Descripcion;
+                    newUser.Activo = userToCreate.Activo;
+                    newUser.FechaCreacion = userToCreate.FechaCreacion;
+                    newUser.FechaActualizacion = userToCreate.FechaActualizacion;
+                    newUser.IDEmpleado = userToCreate.IDEmpleado;
+                    newUser.GlobalEmployeeID = userToCreate.GlobalEmployeeID;
 
                     db.Usuario.Add(newUser);
                     //Lo eliminamos, es la manera de "marcar" que ya está creado
@@ -371,8 +378,9 @@ public class DataToXml
                     //lo creamos
                     newGrupo = db.Grupo.Create();
                     //igualamos todos los campos
+                    newGrupo.GrupoID = groupToCreate.GrupoID;
                     newGrupo.Nombre = groupToCreate.Nombre;
-                    //etc.
+                    newGrupo.Descripcion = groupToCreate.Descripcion;
 
                     db.Grupo.Add(newGrupo);
                     //Lo eliminamos, es la manera de "marcar" que ya está creado
