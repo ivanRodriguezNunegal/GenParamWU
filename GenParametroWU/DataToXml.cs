@@ -355,8 +355,8 @@ public class DataToXml
                     newUser.Nombre = userToCreate.Nombre;
                     newUser.Descripcion = userToCreate.Descripcion;
                     newUser.Activo = userToCreate.Activo;
-                    newUser.FechaCreacion = userToCreate.FechaCreacion;
-                    newUser.FechaActualizacion = userToCreate.FechaActualizacion;
+                    newUser.FechaCreacion = DateTime.UtcNow;
+                    newUser.FechaActualizacion = DateTime.UtcNow;
                     newUser.IDEmpleado = userToCreate.IDEmpleado;
                     newUser.GlobalEmployeeID = userToCreate.GlobalEmployeeID;
 
@@ -417,8 +417,8 @@ public class DataToXml
                         Nombre = user.Nombre,
                         Descripcion = user.Descripcion,
                         Activo = user.Activo,
-                        FechaCreacion = user.FechaCreacion,
-                        FechaActualizacion = user.FechaActualizacion,
+                        FechaCreacion = DateTime.UtcNow,
+                        FechaActualizacion = DateTime.UtcNow,
                         IDEmpleado = user.IDEmpleado,
                         GlobalEmployeeID = user.GlobalEmployeeID,
                         
