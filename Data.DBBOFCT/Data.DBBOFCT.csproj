@@ -53,9 +53,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Country.cs">
+      <DependentUpon>ModelBOFCT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Employee.cs">
+      <DependentUpon>ModelBOFCT.tt</DependentUpon>
+    </Compile>
     <Compile Include="Evento.cs">
       <DependentUpon>ModelBOFCT.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExtendedEntities\Country.cs" />
     <Compile Include="ExtendedEntities\Evento.cs" />
     <Compile Include="ExtendedEntities\Grupo.cs" />
     <Compile Include="ExtendedEntities\GrupoUsuario.cs" />
@@ -90,6 +97,9 @@
       <DependentUpon>ModelBOFCT.tt</DependentUpon>
     </Compile>
     <Compile Include="ParametroWidget_Grupo.cs">
+      <DependentUpon>ModelBOFCT.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileEmployee.cs">
       <DependentUpon>ModelBOFCT.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

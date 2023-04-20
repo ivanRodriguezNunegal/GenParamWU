@@ -33,5 +33,8 @@ namespace Data.DBBOFCT
         public virtual DbSet<TipoEvento> TipoEvento { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
         public virtual DbSet<GrupoUsuario> GrupoUsuario { get; set; }
+        public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<Employee> Employee { get; set; }
+        public virtual DbSet<ProfileEmployee> ProfileEmployee { get; set; }
     }
 }

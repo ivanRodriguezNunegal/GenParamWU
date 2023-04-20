@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -34,7 +35,7 @@ public class DataToXml
     /// 
     /// </summary>
     /// <param name="comboBox"></param>
-    public void RellenarCombo(ComboBox comboBox)
+    public void RellenarComboTablas(ComboBox comboBox)
     {
         // Create a connection to the local SQL Server database
         SqlConnection connection = new SqlConnection("Data Source=localhost;Initial Catalog=BOFCT;Integrated Security=SSPI;");
@@ -421,7 +422,7 @@ public class DataToXml
                         FechaActualizacion = DateTime.UtcNow,
                         IDEmpleado = user.IDEmpleado,
                         GlobalEmployeeID = user.GlobalEmployeeID,
-                        
+
                     };
                     db.Usuario.Add(newUser);
                 }
@@ -438,7 +439,7 @@ public class DataToXml
                         GrupoID = group.GrupoID,
                         Nombre = group.Nombre,
                         Descripcion = group.Descripcion,
-                        
+
                     };
                     db.Grupo.Add(newGroup);
                 }
@@ -483,5 +484,88 @@ public class DataToXml
             */
 
         }
+    }
+    public void FillCountryComboBox(ComboBox comboBox)
+    {
+        // Conexión a la base de datos
+        string connectionString = "Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123";
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            // Comando SQL para obtener los nombres de los países
+            string query = "SELECT Name FROM Country ORDER BY Name";
+            SqlCommand command = new SqlCommand(query, connection);
+
+            // Abrir la conexión y leer los datos
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+
+            // Llenar el ComboBox con los nombres de los países
+            comboBox.DataSource = null;
+            while (reader.Read())
+            {
+                comboBox.Items.Add(reader["Name"].ToString());
+            }
+
+            // Cerrar la conexión y el lector
+            reader.Close();
+            connection.Close();
+        }
+    }
+
+    public void LeerTXT(ComboBox comboBox)
+    {
+        // Mostrar el cuadro de diálogo de abrir archivo
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = "Archivos de texto|*.txt";
+        if (openFileDialog.ShowDialog() != DialogResult.OK)
+        {
+            return; // El usuario canceló la operación
+        }
+
+        List<string[]> data = new List<string[]>();
+        using (StreamReader reader = new StreamReader(openFileDialog.FileName))
+        {
+            // Hacemos la conexion con BD
+            string connectionString = "Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123";
+            SqlConnection connection = new SqlConnection(connectionString);
+            connection.Open();
+
+            // Leemos el documento TXT y especificamos en que columnas se encuenta cada uno de los datos
+            while (!reader.EndOfStream)
+            {
+                string line = reader.ReadLine();
+                string campo1 = line.Substring(0, 8);
+                string campo2 = line.Substring(16, 4);
+                string campo3 = line.Substring(23, 20).Trim(); // eliminamos espacios sobrantes
+                string campo4 = line.Substring(43, 55).Trim();
+                string campo5 = line.Substring(98, 4);
+
+                // Obtener el ID correspondiente al nombre seleccionado en el ComboBox
+                string selectedName = comboBox.SelectedItem.ToString();
+                string selectQuery = "SELECT CountryID FROM Country WHERE Name = @Name";
+                SqlCommand selectCommand = new SqlCommand(selectQuery, connection);
+                selectCommand.Parameters.AddWithValue("@Name", selectedName);
+                int countryID = Convert.ToInt32(selectCommand.ExecuteScalar());
+           
+                string[] row = { campo1, campo2, campo3, campo4, campo5, countryID.ToString() };
+                data.Add(row);
+            }  
+
+            // Insertamos los datos en la base de datos
+            foreach (string[] row in data)
+            {
+                string insertQuery = "INSERT INTO Employee (ProfileEmployeeID, TypeLocationID, Name, Surname, LocalEmployeeID, CountryID, Active) VALUES (@ProfileEmployeeID, @TypeLocationID, @Name, @Surname, @LocalEmployeeID, @CountryID, @Active)";
+                SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
+                insertCommand.Parameters.AddWithValue("@ProfileEmployeeID", 1000);
+                insertCommand.Parameters.AddWithValue("@TypeLocationID", row[1]);
+                insertCommand.Parameters.AddWithValue("@Name", row[2]);
+                insertCommand.Parameters.AddWithValue("@Surname", row[3]);
+                insertCommand.Parameters.AddWithValue("@LocalEmployeeID", row[4]);
+                insertCommand.Parameters.AddWithValue("@CountryID", row[5]);
+                insertCommand.Parameters.AddWithValue("@Active", 0);
+                insertCommand.ExecuteNonQuery();
+            }
+        }
+
     }
 }

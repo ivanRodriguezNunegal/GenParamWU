@@ -29,6 +29,7 @@ namespace GenParametroWU
 
         private void LoadControls(BOFCTEntities db)
         {
+            // Combo Tablas
             List<Grupo> listGrupos = new List<Grupo>();
             listGrupos = Grupo.GetList(db);
 
@@ -40,7 +41,23 @@ namespace GenParametroWU
             //rellenamos el combo de las tablas 
             //creamos una instancia de la clase DataToXml
             DataToXml dataToXml = new DataToXml();
-            dataToXml.RellenarCombo(comboTablas);
+            dataToXml.RellenarComboTablas(comboTablas);
+
+
+
+            //Combo Country
+
+            List<Country> countriesList = new List<Country>();
+            countriesList = Country.GetList(db);
+
+            cbCountries.DataSource = countriesList;
+            cbCountries.DisplayMember = "Name";
+            cbCountries.ValueMember = "CountryID";
+
+
+            //rellenamos el combo de paises
+           
+           dataToXml.FillCountryComboBox(cbCountries);
 
         }
 
@@ -182,6 +199,12 @@ namespace GenParametroWU
                 DataToXml dataToXml = new DataToXml();
                 dataToXml.RestoreFromXml(db);
             }
+        }
+
+        private void btnPaises_Click(object sender, EventArgs e)
+        {
+            DataToXml dataToXml = new DataToXml();
+            dataToXml.LeerTXT(cbCountries);
         }
     }
 }

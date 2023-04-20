@@ -35,6 +35,8 @@
             this.tablaXml = new System.Windows.Forms.Button();
             this.comboTablas = new System.Windows.Forms.ComboBox();
             this.btnFromXML = new System.Windows.Forms.Button();
+            this.btnPaises = new System.Windows.Forms.Button();
+            this.cbCountries = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // cbGrupos
@@ -75,7 +77,7 @@
             // 
             // tablaXml
             // 
-            this.tablaXml.Location = new System.Drawing.Point(747, 119);
+            this.tablaXml.Location = new System.Drawing.Point(673, 60);
             this.tablaXml.Name = "tablaXml";
             this.tablaXml.Size = new System.Drawing.Size(199, 41);
             this.tablaXml.TabIndex = 4;
@@ -86,7 +88,7 @@
             // comboTablas
             // 
             this.comboTablas.FormattingEnabled = true;
-            this.comboTablas.Location = new System.Drawing.Point(745, 183);
+            this.comboTablas.Location = new System.Drawing.Point(673, 131);
             this.comboTablas.Name = "comboTablas";
             this.comboTablas.Size = new System.Drawing.Size(201, 24);
             this.comboTablas.TabIndex = 5;
@@ -101,11 +103,31 @@
             this.btnFromXML.UseVisualStyleBackColor = true;
             this.btnFromXML.Click += new System.EventHandler(this.btnFromXML_Click);
             // 
+            // btnPaises
+            // 
+            this.btnPaises.Location = new System.Drawing.Point(724, 358);
+            this.btnPaises.Name = "btnPaises";
+            this.btnPaises.Size = new System.Drawing.Size(100, 42);
+            this.btnPaises.TabIndex = 7;
+            this.btnPaises.Text = "Procesar";
+            this.btnPaises.UseVisualStyleBackColor = true;
+            this.btnPaises.Click += new System.EventHandler(this.btnPaises_Click);
+            // 
+            // cbCountries
+            // 
+            this.cbCountries.FormattingEnabled = true;
+            this.cbCountries.Location = new System.Drawing.Point(654, 312);
+            this.cbCountries.Name = "cbCountries";
+            this.cbCountries.Size = new System.Drawing.Size(236, 24);
+            this.cbCountries.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.cbCountries);
+            this.Controls.Add(this.btnPaises);
             this.Controls.Add(this.btnFromXML);
             this.Controls.Add(this.comboTablas);
             this.Controls.Add(this.tablaXml);
@@ -130,6 +152,8 @@
         private System.Windows.Forms.Button tablaXml;
         private System.Windows.Forms.ComboBox comboTablas;
         private System.Windows.Forms.Button btnFromXML;
+        private System.Windows.Forms.Button btnPaises;
+        private System.Windows.Forms.ComboBox cbCountries;
     }
 }
 

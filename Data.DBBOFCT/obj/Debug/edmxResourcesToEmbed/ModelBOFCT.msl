@@ -84,5 +84,80 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Country">
+      <EntityTypeMapping TypeName="BOFCTModel.Country">
+        <MappingFragment StoreEntitySet="Country">
+          <ScalarProperty Name="ContinentID" ColumnName="ContinentID" />
+          <ScalarProperty Name="CountryItxID" ColumnName="CountryItxID" />
+          <ScalarProperty Name="Alpha3" ColumnName="Alpha3" />
+          <ScalarProperty Name="Alpha2" ColumnName="Alpha2" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employee">
+      <EntityTypeMapping TypeName="BOFCTModel.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="CECO" ColumnName="CECO" />
+          <ScalarProperty Name="EnumTypeEmployeeID" ColumnName="EnumTypeEmployeeID" />
+          <ScalarProperty Name="TypeLocationID" ColumnName="TypeLocationID" />
+          <ScalarProperty Name="OwnMaxAmount" ColumnName="OwnMaxAmount" />
+          <ScalarProperty Name="AllowOwnMaxAmount" ColumnName="AllowOwnMaxAmount" />
+          <ScalarProperty Name="StartDateTemporaryDiscount" ColumnName="StartDateTemporaryDiscount" />
+          <ScalarProperty Name="HaveTemporaryDiscount" ColumnName="HaveTemporaryDiscount" />
+          <ScalarProperty Name="StartDateAffinity" ColumnName="StartDateAffinity" />
+          <ScalarProperty Name="HaveAffinity" ColumnName="HaveAffinity" />
+          <ScalarProperty Name="ManualUpdateReason" ColumnName="ManualUpdateReason" />
+          <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
+          <ScalarProperty Name="ManualBOUserID" ColumnName="ManualBOUserID" />
+          <ScalarProperty Name="ManualTimeStamp" ColumnName="ManualTimeStamp" />
+          <ScalarProperty Name="ManualUpdate" ColumnName="ManualUpdate" />
+          <ScalarProperty Name="OriginID" ColumnName="OriginID" />
+          <ScalarProperty Name="PrintedID" ColumnName="PrintedID" />
+          <ScalarProperty Name="EnterpriseID" ColumnName="EnterpriseID" />
+          <ScalarProperty Name="DateRequestCard" ColumnName="DateRequestCard" />
+          <ScalarProperty Name="RequestCard" ColumnName="RequestCard" />
+          <ScalarProperty Name="LocalEmployeeID" ColumnName="LocalEmployeeID" />
+          <ScalarProperty Name="PassportID" ColumnName="PassportID" />
+          <ScalarProperty Name="GlobalProfileID" ColumnName="GlobalProfileID" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+          <ScalarProperty Name="MobilePhone" ColumnName="MobilePhone" />
+          <ScalarProperty Name="EMail" ColumnName="EMail" />
+          <ScalarProperty Name="GlobalEmployeeID" ColumnName="GlobalEmployeeID" />
+          <ScalarProperty Name="JoinDate" ColumnName="JoinDate" />
+          <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+          <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+          <ScalarProperty Name="InactiveDatetime" ColumnName="InactiveDatetime" />
+          <ScalarProperty Name="CreationDatetime" ColumnName="CreationDatetime" />
+          <ScalarProperty Name="StoreNumber" ColumnName="StoreNumber" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+          <ScalarProperty Name="ProfileEmployeeID" ColumnName="ProfileEmployeeID" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProfileEmployee">
+      <EntityTypeMapping TypeName="BOFCTModel.ProfileEmployee">
+        <MappingFragment StoreEntitySet="ProfileEmployee">
+          <ScalarProperty Name="HRProfileID" ColumnName="HRProfileID" />
+          <ScalarProperty Name="Empresa" ColumnName="Empresa" />
+          <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+          <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+          <ScalarProperty Name="LocalProfileID" ColumnName="LocalProfileID" />
+          <ScalarProperty Name="TypeLocationID" ColumnName="TypeLocationID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ProfileEmployeeID" ColumnName="ProfileEmployeeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

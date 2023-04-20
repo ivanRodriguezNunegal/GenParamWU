@@ -20,6 +20,11 @@
         <EntityTypeShape EntityType="BOFCTModel.GrupoUsuario" Width="1.5" PointX="5.25" PointY="8.625" />
         <AssociationConnector Association="BOFCTModel.FK_GrupoUsuario_Grupo" />
         <AssociationConnector Association="BOFCTModel.FK_GrupoUsuario_Usuario" />
+        <EntityTypeShape EntityType="BOFCTModel.Country" Width="1.5" PointX="7.375" PointY="12.875" />
+        <EntityTypeShape EntityType="BOFCTModel.Employee" Width="1.5" PointX="9.625" PointY="9.25" />
+        <EntityTypeShape EntityType="BOFCTModel.ProfileEmployee" Width="1.5" PointX="7.375" PointY="16.625" />
+        <AssociationConnector Association="BOFCTModel.FK_Employee_Country" />
+        <AssociationConnector Association="BOFCTModel.FK_Employee_ProfileEmployee" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

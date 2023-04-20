@@ -5,6 +5,64 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="BOFCTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Alpha2" Type="nvarchar" MaxLength="2" />
+          <Property Name="Alpha3" Type="nvarchar" MaxLength="3" />
+          <Property Name="CountryItxID" Type="int" />
+          <Property Name="ContinentID" Type="int" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="250" />
+          <Property Name="ProfileEmployeeID" Type="int" Nullable="false" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="ContactID" Type="int" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="StoreNumber" Type="int" />
+          <Property Name="CreationDatetime" Type="datetime" />
+          <Property Name="InactiveDatetime" Type="datetime" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="JoinDate" Type="datetime" />
+          <Property Name="GlobalEmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobilePhone" Type="nvarchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="date" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="GlobalProfileID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PassportID" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocalEmployeeID" Type="int" />
+          <Property Name="RequestCard" Type="bit" />
+          <Property Name="DateRequestCard" Type="datetime" />
+          <Property Name="EnterpriseID" Type="int" />
+          <Property Name="PrintedID" Type="nvarchar" MaxLength="50" />
+          <Property Name="OriginID" Type="int" />
+          <Property Name="ManualUpdate" Type="bit" Nullable="false" />
+          <Property Name="ManualTimeStamp" Type="datetime" />
+          <Property Name="ManualBOUserID" Type="int" />
+          <Property Name="LastUpdateDate" Type="datetime" />
+          <Property Name="ManualUpdateReason" Type="nvarchar" MaxLength="250" />
+          <Property Name="HaveAffinity" Type="bit" />
+          <Property Name="StartDateAffinity" Type="datetime" />
+          <Property Name="HaveTemporaryDiscount" Type="bit" />
+          <Property Name="StartDateTemporaryDiscount" Type="datetime" />
+          <Property Name="AllowOwnMaxAmount" Type="bit" />
+          <Property Name="OwnMaxAmount" Type="int" />
+          <Property Name="TypeLocationID" Type="int" />
+          <Property Name="EnumTypeEmployeeID" Type="varchar" MaxLength="3" />
+          <Property Name="CECO" Type="varchar" MaxLength="5" />
+        </EntityType>
         <EntityType Name="Evento">
           <Key>
             <PropertyRef Name="EventoID" />
@@ -58,6 +116,20 @@
           <Property Name="Valor" Type="nvarchar(max)" Nullable="false" />
           <Property Name="UsuarioID" Type="int" />
         </EntityType>
+        <EntityType Name="ProfileEmployee">
+          <Key>
+            <PropertyRef Name="ProfileEmployeeID" />
+          </Key>
+          <Property Name="ProfileEmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="TypeLocationID" Type="int" />
+          <Property Name="LocalProfileID" Type="int" />
+          <Property Name="CountryID" Type="varchar" MaxLength="4" />
+          <Property Name="OrganizationID" Type="nvarchar" MaxLength="10" />
+          <Property Name="Empresa" Type="nvarchar" MaxLength="10" />
+          <Property Name="HRProfileID" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="TipoEvento">
           <Key>
             <PropertyRef Name="TipoEventoID" />
@@ -80,6 +152,30 @@
           <Property Name="IDEmpleado" Type="int" />
           <Property Name="GlobalEmployeeID" Type="int" />
         </EntityType>
+        <Association Name="FK_Employee_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_ProfileEmployee">
+          <End Role="ProfileEmployee" Type="Self.ProfileEmployee" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfileEmployee">
+              <PropertyRef Name="ProfileEmployeeID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="ProfileEmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Evento_TipoEvento">
           <End Role="TipoEvento" Type="Self.TipoEvento" Multiplicity="1" />
           <End Role="Evento" Type="Self.Evento" Multiplicity="*" />
@@ -165,14 +261,25 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="BOFCTModelStoreContainer">
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Evento" EntityType="Self.Evento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GrupoUsuario" EntityType="Self.GrupoUsuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Parametro" EntityType="Self.Parametro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ParametroWidget" EntityType="Self.ParametroWidget" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ParametroWidget_Grupo" EntityType="Self.ParametroWidget_Grupo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProfileEmployee" EntityType="Self.ProfileEmployee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoEvento" EntityType="Self.TipoEvento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_Country" Association="Self.FK_Employee_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_ProfileEmployee" Association="Self.FK_Employee_ProfileEmployee">
+            <End Role="ProfileEmployee" EntitySet="ProfileEmployee" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
           <AssociationSet Name="FK_Evento_TipoEvento" Association="Self.FK_Evento_TipoEvento">
             <End Role="TipoEvento" EntitySet="TipoEvento" />
             <End Role="Evento" EntitySet="Evento" />
@@ -382,6 +489,17 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="GrupoUsuario" EntitySet="GrupoUsuario" />
           </AssociationSet>
+          <EntitySet Name="Country" EntityType="BOFCTModel.Country" />
+          <EntitySet Name="Employee" EntityType="BOFCTModel.Employee" />
+          <EntitySet Name="ProfileEmployee" EntityType="BOFCTModel.ProfileEmployee" />
+          <AssociationSet Name="FK_Employee_Country" Association="BOFCTModel.FK_Employee_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_ProfileEmployee" Association="BOFCTModel.FK_Employee_ProfileEmployee">
+            <End Role="ProfileEmployee" EntitySet="ProfileEmployee" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="GrupoUsuario">
           <Key>
@@ -414,6 +532,106 @@
             </Principal>
             <Dependent Role="GrupoUsuario">
               <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Alpha2" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="Alpha3" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="CountryItxID" Type="Int32" />
+          <Property Name="ContinentID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="BOFCTModel.FK_Employee_Country" FromRole="Country" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ProfileEmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="ContactID" Type="Int32" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="StoreNumber" Type="Int32" />
+          <Property Name="CreationDatetime" Type="DateTime" Precision="3" />
+          <Property Name="InactiveDatetime" Type="DateTime" Precision="3" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="JoinDate" Type="DateTime" Precision="3" />
+          <Property Name="GlobalEmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobilePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="DateTime" Precision="0" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="GlobalProfileID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PassportID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocalEmployeeID" Type="Int32" />
+          <Property Name="RequestCard" Type="Boolean" />
+          <Property Name="DateRequestCard" Type="DateTime" Precision="3" />
+          <Property Name="EnterpriseID" Type="Int32" />
+          <Property Name="PrintedID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OriginID" Type="Int32" />
+          <Property Name="ManualUpdate" Type="Boolean" Nullable="false" />
+          <Property Name="ManualTimeStamp" Type="DateTime" Precision="3" />
+          <Property Name="ManualBOUserID" Type="Int32" />
+          <Property Name="LastUpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="ManualUpdateReason" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="HaveAffinity" Type="Boolean" />
+          <Property Name="StartDateAffinity" Type="DateTime" Precision="3" />
+          <Property Name="HaveTemporaryDiscount" Type="Boolean" />
+          <Property Name="StartDateTemporaryDiscount" Type="DateTime" Precision="3" />
+          <Property Name="AllowOwnMaxAmount" Type="Boolean" />
+          <Property Name="OwnMaxAmount" Type="Int32" />
+          <Property Name="TypeLocationID" Type="Int32" />
+          <Property Name="EnumTypeEmployeeID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CECO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Country" Relationship="BOFCTModel.FK_Employee_Country" FromRole="Employee" ToRole="Country" />
+          <NavigationProperty Name="ProfileEmployee" Relationship="BOFCTModel.FK_Employee_ProfileEmployee" FromRole="Employee" ToRole="ProfileEmployee" />
+        </EntityType>
+        <EntityType Name="ProfileEmployee">
+          <Key>
+            <PropertyRef Name="ProfileEmployeeID" />
+          </Key>
+          <Property Name="ProfileEmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="TypeLocationID" Type="Int32" />
+          <Property Name="LocalProfileID" Type="Int32" />
+          <Property Name="CountryID" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="OrganizationID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Empresa" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="HRProfileID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="BOFCTModel.FK_Employee_ProfileEmployee" FromRole="ProfileEmployee" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Employee_Country">
+          <End Type="BOFCTModel.Country" Role="Country" Multiplicity="1" />
+          <End Type="BOFCTModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_ProfileEmployee">
+          <End Type="BOFCTModel.ProfileEmployee" Role="ProfileEmployee" Multiplicity="1" />
+          <End Type="BOFCTModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfileEmployee">
+              <PropertyRef Name="ProfileEmployeeID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="ProfileEmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -503,6 +721,81 @@
                 <ScalarProperty Name="GrupoID" ColumnName="GrupoID" />
                 <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
                 <ScalarProperty Name="GrupoUsuarioID" ColumnName="GrupoUsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="BOFCTModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="ContinentID" ColumnName="ContinentID" />
+                <ScalarProperty Name="CountryItxID" ColumnName="CountryItxID" />
+                <ScalarProperty Name="Alpha3" ColumnName="Alpha3" />
+                <ScalarProperty Name="Alpha2" ColumnName="Alpha2" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="BOFCTModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="CECO" ColumnName="CECO" />
+                <ScalarProperty Name="EnumTypeEmployeeID" ColumnName="EnumTypeEmployeeID" />
+                <ScalarProperty Name="TypeLocationID" ColumnName="TypeLocationID" />
+                <ScalarProperty Name="OwnMaxAmount" ColumnName="OwnMaxAmount" />
+                <ScalarProperty Name="AllowOwnMaxAmount" ColumnName="AllowOwnMaxAmount" />
+                <ScalarProperty Name="StartDateTemporaryDiscount" ColumnName="StartDateTemporaryDiscount" />
+                <ScalarProperty Name="HaveTemporaryDiscount" ColumnName="HaveTemporaryDiscount" />
+                <ScalarProperty Name="StartDateAffinity" ColumnName="StartDateAffinity" />
+                <ScalarProperty Name="HaveAffinity" ColumnName="HaveAffinity" />
+                <ScalarProperty Name="ManualUpdateReason" ColumnName="ManualUpdateReason" />
+                <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
+                <ScalarProperty Name="ManualBOUserID" ColumnName="ManualBOUserID" />
+                <ScalarProperty Name="ManualTimeStamp" ColumnName="ManualTimeStamp" />
+                <ScalarProperty Name="ManualUpdate" ColumnName="ManualUpdate" />
+                <ScalarProperty Name="OriginID" ColumnName="OriginID" />
+                <ScalarProperty Name="PrintedID" ColumnName="PrintedID" />
+                <ScalarProperty Name="EnterpriseID" ColumnName="EnterpriseID" />
+                <ScalarProperty Name="DateRequestCard" ColumnName="DateRequestCard" />
+                <ScalarProperty Name="RequestCard" ColumnName="RequestCard" />
+                <ScalarProperty Name="LocalEmployeeID" ColumnName="LocalEmployeeID" />
+                <ScalarProperty Name="PassportID" ColumnName="PassportID" />
+                <ScalarProperty Name="GlobalProfileID" ColumnName="GlobalProfileID" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="MobilePhone" ColumnName="MobilePhone" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="GlobalEmployeeID" ColumnName="GlobalEmployeeID" />
+                <ScalarProperty Name="JoinDate" ColumnName="JoinDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="InactiveDatetime" ColumnName="InactiveDatetime" />
+                <ScalarProperty Name="CreationDatetime" ColumnName="CreationDatetime" />
+                <ScalarProperty Name="StoreNumber" ColumnName="StoreNumber" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="ProfileEmployeeID" ColumnName="ProfileEmployeeID" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProfileEmployee">
+            <EntityTypeMapping TypeName="BOFCTModel.ProfileEmployee">
+              <MappingFragment StoreEntitySet="ProfileEmployee">
+                <ScalarProperty Name="HRProfileID" ColumnName="HRProfileID" />
+                <ScalarProperty Name="Empresa" ColumnName="Empresa" />
+                <ScalarProperty Name="OrganizationID" ColumnName="OrganizationID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="LocalProfileID" ColumnName="LocalProfileID" />
+                <ScalarProperty Name="TypeLocationID" ColumnName="TypeLocationID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProfileEmployeeID" ColumnName="ProfileEmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
