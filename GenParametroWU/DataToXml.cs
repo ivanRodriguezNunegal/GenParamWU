@@ -554,15 +554,16 @@ public class DataToXml
             // Insertamos los datos en la base de datos
             foreach (string[] row in data)
             {
-                string insertQuery = "INSERT INTO Employee (ProfileEmployeeID, TypeLocationID, Name, Surname, LocalEmployeeID, CountryID, Active) VALUES (@ProfileEmployeeID, @TypeLocationID, @Name, @Surname, @LocalEmployeeID, @CountryID, @Active)";
+                string insertQuery = "INSERT INTO Employee (ProfileEmployeeID, StoreNumber, Name, Surname, LocalEmployeeID, CountryID, Active, CreationDatetime) VALUES (@ProfileEmployeeID, @StoreNumber, @Name, @Surname, @LocalEmployeeID, @CountryID, @Active, @CreationDatetime)";
                 SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
                 insertCommand.Parameters.AddWithValue("@ProfileEmployeeID", 1000);
-                insertCommand.Parameters.AddWithValue("@TypeLocationID", row[1]);
+                insertCommand.Parameters.AddWithValue("@StoreNumber", row[1]);
                 insertCommand.Parameters.AddWithValue("@Name", row[2]);
                 insertCommand.Parameters.AddWithValue("@Surname", row[3]);
                 insertCommand.Parameters.AddWithValue("@LocalEmployeeID", row[4]);
                 insertCommand.Parameters.AddWithValue("@CountryID", row[5]);
                 insertCommand.Parameters.AddWithValue("@Active", 0);
+                insertCommand.Parameters.AddWithValue("@CreationDatetime", DateTime.UtcNow);
                 insertCommand.ExecuteNonQuery();
             }
         }
