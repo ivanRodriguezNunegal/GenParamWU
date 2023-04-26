@@ -10,6 +10,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,8 +19,10 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Data.DBBOFCT;
+using Newtonsoft.Json;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ComboBox = System.Windows.Forms.ComboBox;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 public class DataToXml
 {
@@ -125,6 +129,7 @@ public class DataToXml
         MessageBox.Show("Documento XML guardado en: " + nombreXML);
     }
 
+    //metodo para guardar los datos de una tabla en un documento XML
     public void Execute(ComboBox comboBox)
     {
 
@@ -189,6 +194,7 @@ public class DataToXml
             MessageBox.Show("Documento XML guardado en: " + nombreXML);
         }
     }
+
 
     public void RestoreFromXml(BOFCTEntities db)
     {
@@ -568,5 +574,162 @@ public class DataToXml
             }
         }
 
+    }
+
+
+    //metodo para guardar los datos de una tabla en un documento JSON
+
+    public void ExecuteJSON(ComboBox comboBox)
+    {
+        // Recuperamos el elemento seleccionado del comboBox
+        string tablaSeleccionada = comboBox.SelectedItem.ToString();
+
+        // Hacemos la conexión SQL y lanzamos la query para recuperar los datos
+        string connectionString = "Data Source=localhost;Initial Catalog=BOFCT;User ID=sa;Password=Aulanosa123";
+        string query = "SELECT * FROM " + tablaSeleccionada;
+
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            // Comando SQL, le pasamos los parametros
+            SqlCommand command = new SqlCommand(query, connection);
+            connection.Open();
+
+            // Con "SqlDataReader" leemos los datos de la consulta realizada
+            SqlDataReader reader = command.ExecuteReader();
+
+            // Creamos una lista de diccionarios para almacenar los datos de cada fila
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+
+            // Para cada fila leemos las columnas y sus valores
+            while (reader.Read())
+            {
+                Dictionary<string, object> row = new Dictionary<string, object>();
+
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    string columnName = reader.GetName(i);
+
+                    // Comprobamos los null
+                    object columnValue = reader.IsDBNull(i) ? null : reader.GetValue(i);
+
+                    row.Add(columnName, columnValue);
+                }
+
+                rows.Add(row);
+            }
+
+            // Configuramos las opciones de serialización JSON
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                Converters =
+            {
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            }
+            };
+
+            // Convertimos la lista de diccionarios a un objeto JSON
+            string json = JsonSerializer.Serialize(rows, options);
+
+            // Guardamos el objeto JSON en la ruta deseada
+            string nombreJSON = "C:\\temp\\" + tablaSeleccionada + ".json";
+            File.WriteAllText(nombreJSON, json);
+
+            MessageBox.Show("Documento JSON guardado en: " + nombreJSON);
+        }
+    }
+
+    // Metodo para guardar desde JSON
+
+    public void RestoreFromJson(BOFCTEntities db)
+    {
+        // Create instance of OpenFileDialog
+        OpenFileDialog openFileDialog = new OpenFileDialog();
+
+        // Set filter to only show JSON files
+        openFileDialog.Filter = "JSON files (*.json)|*.json";
+
+        // Show the file dialog to let the user select the file
+        DialogResult result = openFileDialog.ShowDialog();
+
+        // If the user selected a file...
+        if (result == DialogResult.OK)
+        {
+            // Get the file path
+            string filePath = openFileDialog.FileName;
+
+            // Load the JSON file
+            string jsonString = File.ReadAllText(filePath);
+
+            // Deserialize the JSON string into a Dictionary<string, List<Dictionary<string, string>>>
+            Dictionary<string, List<Dictionary<string, string>>> tables = JsonConvert.DeserializeObject<Dictionary<string, List<Dictionary<string, string>>>>(jsonString);
+
+            // Extract the list of GrupoUsuario objects
+            List<GrupoUsuario> listaGu = new List<GrupoUsuario>();
+            if (tables.ContainsKey("GrupoUsuario"))
+            {
+                foreach (Dictionary<string, string> dictionary in tables["GrupoUsuario"])
+                {
+                    GrupoUsuario gu = new GrupoUsuario();
+
+                    // Set the properties of the GrupoUsuario object from the values in the dictionary
+                    gu.GrupoUsuarioID = int.Parse(dictionary["GrupoUsuarioID"]);
+                    gu.UsuarioID = int.Parse(dictionary["UsuarioID"]);
+                    gu.GrupoID = int.Parse(dictionary["GrupoID"]);
+
+                    // Add the object to the list
+                    listaGu.Add(gu);
+                }
+            }
+
+            // Extract the list of Usuario objects
+            List<Usuario> listaUser = new List<Usuario>();
+            if (tables.ContainsKey("Usuario"))
+            {
+                foreach (Dictionary<string, string> dictionary in tables["Usuario"])
+                {
+                    Usuario usuario = new Usuario();
+
+                    usuario.UsuarioID = int.Parse(dictionary["UsuarioID"]);
+                    usuario.Login = dictionary["Login"];
+                    usuario.Nombre = dictionary["Nombre"];
+                    usuario.Descripcion = dictionary["Descripcion"];
+                    usuario.Activo = bool.Parse(dictionary["Activo"]);
+
+                    usuario.FechaCreacion = dictionary["FechaCreacion"] != null ?
+                        DateTime.TryParse(dictionary["FechaCreacion"], out DateTime createdDate) ? createdDate : DateTime.MinValue : DateTime.MinValue;
+
+                    usuario.FechaActualizacion = dictionary["FechaActualizacion"] != null ?
+                        DateTime.TryParse(dictionary["FechaActualizacion"], out DateTime updatedDate) ? updatedDate : DateTime.MinValue : DateTime.MinValue;
+
+                    usuario.IDEmpleado = dictionary["IDEmpleado"] != null ?
+                        int.TryParse(dictionary["IDEmpleado"], out int employeeId) ? employeeId : 0 : 0;
+
+                    usuario.GlobalEmployeeID = dictionary["GlobalEmployeeID"] != null ?
+                        int.TryParse(dictionary["GlobalEmployeeID"], out int globalEmployeeId) ? globalEmployeeId : 0 : 0;
+
+                    // Add the object to the list
+                    listaUser.Add(usuario);
+                }
+            }
+
+            // Extract the list of Grupo objects
+            List<Grupo> listaGrupo = new List<Grupo>();
+            if (tables.ContainsKey("Grupo"))
+            {
+                foreach (Dictionary<string, string> dictionary in tables["Grupo"])
+                {
+                    Grupo grupo = new Grupo();
+
+                    grupo.GrupoID = int.Parse(dictionary["GrupoID"]);
+                    grupo.Nombre = dictionary["Nombre"];
+                    grupo.Descripcion = dictionary["Descripcion"];
+
+                    // Add the object to the list
+                    listaGrupo.Add(grupo);
+                }
+            }
+        }
     }
 }

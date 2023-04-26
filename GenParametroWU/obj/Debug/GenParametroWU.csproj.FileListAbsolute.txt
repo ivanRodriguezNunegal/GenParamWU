@@ -91,3 +91,23 @@ C:\Users\Goibe\source\repos\GenParamWU - copia (2)\GenParametroWU\obj\Debug\GenP
 C:\Users\Goibe\source\repos\GenParamWU - copia (2)\GenParametroWU\obj\Debug\GenParametroWU.csproj.CopyComplete
 C:\Users\Goibe\source\repos\GenParamWU - copia (2)\GenParametroWU\obj\Debug\GenParametroWU.exe
 C:\Users\Goibe\source\repos\GenParamWU - copia (2)\GenParametroWU\obj\Debug\GenParametroWU.pdb
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Buffers.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Memory.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Text.Encodings.Web.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Text.Json.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Threading.Tasks.Extensions.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.ValueTuple.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Buffers.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Memory.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Text.Encodings.Web.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Text.Json.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.Threading.Tasks.Extensions.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\System.ValueTuple.xml
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Goibe\source\repos\GenParamWU\GenParametroWU\bin\Debug\Newtonsoft.Json.xml

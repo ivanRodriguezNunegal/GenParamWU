@@ -186,10 +186,10 @@ namespace GenParametroWU
             dataToXml.Execute(listTables);
             */
 
-            /*
+            
             DataToXml dataToXml = new DataToXml();
-            dataToXml.Execute(comboTablas);
-            */   
+            dataToXml.ExecuteJSON(comboTablas);
+             
         }
 
         private void btnFromXML_Click(object sender, EventArgs e)
@@ -197,7 +197,7 @@ namespace GenParametroWU
             using (BOFCTEntities db = new BOFCTEntities())
             {
                 DataToXml dataToXml = new DataToXml();
-                dataToXml.RestoreFromXml(db);
+                dataToXml.RestoreFromJson(db);
             }
         }
 
