@@ -610,10 +610,14 @@ public class DataToXml
                 {
                     string columnName = reader.GetName(i);
 
-                    // Comprobamos los null
-                    object columnValue = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                    // Comprobamos los null para no añadirlos al documento
+                    object columnValue = reader.IsDBNull(i) ? DBNull.Value : reader.GetValue(i);
 
-                    row.Add(columnName, columnValue);
+                    // Si no es null, agregamos la linea con los datos
+                    if (columnValue != DBNull.Value)
+                    {
+                        row.Add(columnName, columnValue);
+                    }
                 }
 
                 rows.Add(row);
