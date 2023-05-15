@@ -556,23 +556,92 @@ public class DataToXml
            
                 string[] row = { campo1, campo2, campo3, campo4, campo5, countryID.ToString() };
                 data.Add(row);
-            }  
+            }
 
-            // Insertamos los datos en la base de datos
+
+            // INSERCION DE LOS DATOS EN LA BASE DE DATOS
             foreach (string[] row in data)
             {
-                string insertQuery = "INSERT INTO Employee (ProfileEmployeeID, StoreNumber, Name, Surname, LocalEmployeeID, CountryID, Active, CreationDatetime) VALUES (@ProfileEmployeeID, @StoreNumber, @Name, @Surname, @LocalEmployeeID, @CountryID, @Active, @CreationDatetime)";
-                SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
-                insertCommand.Parameters.AddWithValue("@ProfileEmployeeID", 1000);
-                insertCommand.Parameters.AddWithValue("@StoreNumber", row[1]);
-                insertCommand.Parameters.AddWithValue("@Name", row[2]);
-                insertCommand.Parameters.AddWithValue("@Surname", row[3]);
-                insertCommand.Parameters.AddWithValue("@LocalEmployeeID", row[4]);
-                insertCommand.Parameters.AddWithValue("@CountryID", row[5]);
-                insertCommand.Parameters.AddWithValue("@Active", 0);
-                insertCommand.Parameters.AddWithValue("@CreationDatetime", DateTime.UtcNow);
-                insertCommand.ExecuteNonQuery();
+                //Con este bloqe comprobamos que existe un registro con ese LocalEmployeeID y le asignamos el que tenia
+                string selectQuery = "SELECT COUNT(*) FROM Employee WHERE LocalEmployeeID = @LocalEmployeeID";
+                SqlCommand selectCommand = new SqlCommand(selectQuery, connection);
+                selectCommand.Parameters.AddWithValue("@LocalEmployeeID", row[4]);
+                int count = Convert.ToInt32(selectCommand.ExecuteScalar());
+
+                // Checkeamos que ya exista en BD
+                if (count > 0)
+                {
+                    // Si el registro ya existe en la BD actualizamos todos sus campos excepto su LocalEmployeeID para identificarlo
+                    string updateQuery = "UPDATE Employee SET ProfileEmployeeID = @ProfileEmployeeID, StoreNumber = @StoreNumber, Name = @Name, Surname = @Surname, CountryID = @CountryID, Active = @Active, CreationDatetime = @CreationDatetime WHERE LocalEmployeeID = @LocalEmployeeID";
+                    SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
+                    updateCommand.Parameters.AddWithValue("@ProfileEmployeeID", 1000);
+                    updateCommand.Parameters.AddWithValue("@StoreNumber", row[1]);
+                    updateCommand.Parameters.AddWithValue("@Name", row[2]);
+                    updateCommand.Parameters.AddWithValue("@Surname", row[3]);
+                    updateCommand.Parameters.AddWithValue("@CountryID", row[5]);
+                    updateCommand.Parameters.AddWithValue("@Active", 0);
+                    updateCommand.Parameters.AddWithValue("@CreationDatetime", DateTime.UtcNow);
+                    updateCommand.Parameters.AddWithValue("@LocalEmployeeID", row[4]);
+                    updateCommand.ExecuteNonQuery();
+                }
+
+                // Si no existe en BD
+                else
+                {
+                    // Si no lo tenemos en la base de datos, lo insertamos
+                    string insertQuery = "INSERT INTO Employee (ProfileEmployeeID, StoreNumber, Name, Surname, LocalEmployeeID, CountryID, Active, CreationDatetime) VALUES (@ProfileEmployeeID, @StoreNumber, @Name, @Surname, @LocalEmployeeID, @CountryID, @Active, @CreationDatetime)";
+                    SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
+                    insertCommand.Parameters.AddWithValue("@ProfileEmployeeID", 1000);
+                    insertCommand.Parameters.AddWithValue("@StoreNumber", row[1]);
+                    insertCommand.Parameters.AddWithValue("@Name", row[2]);
+                    insertCommand.Parameters.AddWithValue("@Surname", row[3]);
+                    insertCommand.Parameters.AddWithValue("@LocalEmployeeID", row[4]);
+                    insertCommand.Parameters.AddWithValue("@CountryID", row[5]);
+                    insertCommand.Parameters.AddWithValue("@Active", 0);
+                    insertCommand.Parameters.AddWithValue("@CreationDatetime", DateTime.UtcNow);
+                    insertCommand.ExecuteNonQuery();
+                }
             }
+
+            // Una vez hemos terminado de insertar y actualizar los datos correspondientes
+
+            // Consulta para obtener todos los empleados que tengan el campo "Deleted" a 0
+            string selectQuery2 = "SELECT * FROM Employee WHERE Deleted = @Deleted";
+            SqlCommand selectCommand2 = new SqlCommand(selectQuery2, connection);
+            selectCommand2.Parameters.AddWithValue("@Deleted", 0);
+            SqlDataReader reader2 = selectCommand2.ExecuteReader();
+
+            while (reader2.Read())
+            {
+                // Obtener el LocalEmployeeID del empleado actual
+                string localEmployeeID = reader2["LocalEmployeeID"].ToString();
+
+                // Comprobar si el LocalEmployeeID está en la lista de datos
+                bool found = false;
+                foreach (string[] row in data)
+                {
+                    if (row[4] == localEmployeeID)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                // Si el LocalEmployeeID no está en la lista de datos, actualizar los campos Deleted y EndDate
+                if (!found)
+                {
+                    string updateQuery2 = "UPDATE Employee SET Deleted = @Deleted, EndDate = @EndDate WHERE LocalEmployeeID = @LocalEmployeeID";
+                    SqlCommand updateCommand2 = new SqlCommand(updateQuery2, connection);
+                    updateCommand2.Parameters.AddWithValue("@Deleted", 1);
+                    updateCommand2.Parameters.AddWithValue("@EndDate", DateTime.Now);
+                    updateCommand2.Parameters.AddWithValue("@LocalEmployeeID", localEmployeeID);
+                    updateCommand2.ExecuteNonQuery();
+                }
+            }
+
+            // Cerrar el lector de datos
+            reader.Close();
+
         }
 
     }
