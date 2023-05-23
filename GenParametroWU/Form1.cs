@@ -80,6 +80,7 @@ namespace GenParametroWU
                 {
 
                     List<ParametroWidget_Grupo> lista = new List<ParametroWidget_Grupo>();
+                    List<ParametroWidget_Grupo> registrosRedundantes = new List<ParametroWidget_Grupo>();
                     lista = ParametroWidget_Grupo.GetList(db, Convert.ToInt32(cbGrupos.SelectedValue.ToString()));
 
                     //Hacer lista para el metodo GetUsersInGroup creado en Usuario
@@ -93,6 +94,7 @@ namespace GenParametroWU
                     db.SaveChanges();
 
                     */
+
 
                     foreach (ParametroWidget_Grupo item in lista)
                     {
@@ -124,17 +126,27 @@ namespace GenParametroWU
                                 evReg.FechaCreacion = DateTime.Now;
                                 Evento.Insert(db, evReg);
                             }
+                            else
+                            {
+                                registrosRedundantes.Add(pwg);
+                            }
                         }
 
-                        //insertamos un evento de info una vez se hayan insertado todos los registros en BD
-                        Evento evFin = db.Evento.Create();
-                        evFin.TipoEventoID = 4;
-                        evFin.Asunto = "Inserción Completada";
-                        evFin.Mensaje = "Proceso finalizado contra " + item.GrupoID;
-                        evFin.FechaCreacion = DateTime.Now;
-                        Evento.Insert(db, evFin);
+                        foreach (ParametroWidget_Grupo redundante in registrosRedundantes)
+                        {
+                            ParametroWidget_Grupo.Delete(db, redundante);
 
-                        pgbrEjecucion.Value++;
+                            // Insertar evento de info para registrar en BD la eliminación del registro redundante
+                            Evento evEliminacion = db.Evento.Create();
+                            evEliminacion.TipoEventoID = 5;
+                            evEliminacion.Asunto = "Eliminación ParametroWidget_Grupo";
+                            evEliminacion.Mensaje = redundante.UsuarioID.ToString();
+                            evEliminacion.FechaCreacion = DateTime.Now;
+                            Evento.Insert(db, evEliminacion);
+
+                            pgbrEjecucion.Value++;
+                        }
+            
                     }
                     //mostramos mensaje de finalizado y reset de la progressbar
                     MessageBox.Show("¡Proceso finalizado exitosamente!", "¡Terminado!", MessageBoxButtons.OK, MessageBoxIcon.Information);

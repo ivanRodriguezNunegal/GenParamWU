@@ -51,6 +51,12 @@ namespace Data.DBBOFCT
             }
            
         }
+
+        public static void Delete(BOFCTEntities db, ParametroWidget_Grupo registro)
+        {
+            db.ParametroWidget_Grupo.Remove(registro);
+            db.SaveChanges();
+        }
     }
 }
 
